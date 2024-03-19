@@ -20,4 +20,8 @@
 
 # Others
 - Keyboard input  
-- Colors & Visual effects (use lib) 
+- Colors & Visual effects (use lib)
+
+# Tasks: 
+Me: Pathfinding, Help Feature, glueing game flows: checkwin, new stages, board logics,...
+Quynh: Keyboard input, visual, save game, 2D array generation
