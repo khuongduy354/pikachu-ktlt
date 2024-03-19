@@ -24,4 +24,5 @@
 
 # Tasks: 
 Me: Pathfinding, Help Feature, glueing game flows: checkwin, new stages, board logics,...
+
 Quynh: Keyboard input, visual, save game, 2D array generation
