@@ -13,6 +13,7 @@ using namespace std;
 #define INT_MAX 2147483647
 #define NULL_POINT \
   Point { -1, -1 }
+#define MAX_ARR_SIZE 100
 
 struct Point
 {
@@ -48,7 +49,7 @@ struct Point
 // Comparison function for the priority_queue
 struct CompareCost
 {
-  bool operator()(const pair<int, vector<Point>> &a, const pair<int, vector<Point>> &b) const
+  bool operator()(pair<int, Point> a, pair<int, Point> b) const
   {
     return a.first < b.first;
   }
@@ -89,22 +90,33 @@ class AStarGrid
   char **board;
   CostTracker cost_tracker;
 
+  public:
   AStarGrid(char **board)
   {
     this->board = board;
   }
 
-  int cal_cost(Point &target, Point &start, Point &end)
+  int cal_cost(const Point &prev, const Point &curr, const Point &start, const Point &end)
   {
+    // manhattan distance
+    int g = abs(curr.x - start.x) + abs(curr.y - start.y);
+    int h = abs(curr.x - end.x) + abs(curr.y - end.y);
+
+    int f = g + h;
+
+    // turning cost
+
+    return f;
   }
 
-  void find_path(Point &start, Point &end)
+  void find_path(const Point &start,const Point &end)
   {
     // reset cost tracker
     cost_tracker = CostTracker(); 
 
-    char letter = board[start.x][start.y]; 
+    char start_letter = board[start.x][start.y]; 
     Point target = start;
+    cout << "Start: " << target.x << " " << target.y << endl;
     while (target != end && target != NULL_POINT)
     {
       // calculate cost of neighbors
@@ -113,17 +125,20 @@ class AStarGrid
       {
         Point neighbor = target + dir;
         // skip obstacles
-        if (board[neighbor.x][neighbor.y] == '\0' || board[neighbor.x][neighbor.y] != letter)
+        char n_char = board[neighbor.x][neighbor.y];
+        if (n_char == '\0' || (n_char != ' '  && n_char != start_letter))
           continue;
 
         // evaluate cost
-        int cost = cal_cost(neighbor, start, end);
+        int cost = cal_cost(target ,neighbor, start, end);
         cost_tracker.insert(neighbor, cost);
       }
 
       // pick next lowest cost target
       target = cost_tracker.pop_point_with_least_cost();
-
+      if(target != NULL_POINT) {
+        cout << "Next target: " << target.x << " " << target.y << endl;
+      }
       // continue until target reach destination
     } 
     if(target == NULL_POINT) {
@@ -133,5 +148,33 @@ class AStarGrid
     }
   }
 };
+char** setup_board(char b[MAX_ARR_SIZE][MAX_ARR_SIZE], int size) {
+  char **board = new char*[size];
+  for(int i = 0; i < size; i++) {
+    board[i] = new char[size];
+    for(int j = 0; j < size; j++) {
+      board[i][j] = b[i][j];
+    }
+  }
+  return board;
+}
 
-int main() { char a = '\0'; }
+
+int main() {
+  //10
+  char b1[MAX_ARR_SIZE][MAX_ARR_SIZE] = {{
+      '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
+      {'\0', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', 'F', '\0', 'A', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', ' ', 'B', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'},
+      {'\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', '\0'},
+      {'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'}};
+    
+  char **board = setup_board(b1,10);
+  AStarGrid astar = AStarGrid(board);
+  astar.find_path(Point{1,1}, Point{8,8});
+}
