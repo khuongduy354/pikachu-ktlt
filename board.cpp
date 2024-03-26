@@ -83,10 +83,10 @@ Board generateBoard(GameConfig config)
       B.c[i] = new Cell [config.n];
       for (int j = 0; j < config.n; j++)
       {
-        B.c[i]->i = i;
-        B.c[i]->j = j;
-        B.c[i]->c = chars[getRandomInt(0, config.m * config.n - 1)];
-        B.c[i]->state = 0;
+        B.c[i][j].i = i;
+        B.c[i][j].j = j;
+        B.c[i][j].c = chars[getRandomInt(0, config.m * config.n - 1)];
+        B.c[i][j].state = 0;
       }
     }
     delete [] ran_chars;
@@ -101,22 +101,6 @@ void showBoard(Board B)
     for (int j = 0; j < B.config.n; j++)
       drawCell(B.c[i][j], 112);
 }
-
-void deleteBoard(char** board, GameConfig config) {
-    for (int i = 0; i < config.m; ++i) 
-        delete[] board[i];
-    delete[] board;
-}
-
-// void printBoard(char** board, GameConfig config) 
-// {
-//     for (int i = 0; i < config.m; ++i) {
-//       for (int j = 0; j < config.n; ++j) {
-//           cout << board[i][j] << ' ';
-//         }
-//         cout << '\n';
-//     }
-// }
 
 
 int main() 
