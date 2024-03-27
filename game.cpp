@@ -1,5 +1,6 @@
 #include <iostream>
 #include "board.h"
+#include "Astar.h"
 using namespace std;
 
 #ifndef VECI //integer vector(x,y)
@@ -90,7 +91,9 @@ public:
         }
         return NULL;
     }
-    void checkForMatching(){};
+    void checkForMatching(){
+
+    };
     void pickCell()
     {
         Cell *c_under_cursor = getCell(c_idx);
