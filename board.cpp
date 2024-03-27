@@ -113,20 +113,9 @@ Board generateBoard(GameConfig config)
   }
 }
 
-void showBoard(Board B)
+void showBoard(Board &B)
 {
   for (int i = 0; i < B.config.m; i++)
     for (int j = 0; j < B.config.n; j++)
       drawCell(B.c[i][j], 112);
-}
-
-int main()
-{
-  srand((time(nullptr)));
-  GameConfig config = {4, 5, 4, {2, 4, 6, 8}}; // Example configuration
-  system("cls");
-  Board B = generateBoard(config);
-  showBoard(B);
-
-  return 0;
 }
