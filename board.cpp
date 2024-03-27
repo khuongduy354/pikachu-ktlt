@@ -55,6 +55,18 @@ int getRandomInt(int begin, int end)
 	uniform_int_distribution<int> dist(begin, end);
 	return dist(mt);
 }
+
+**char toCharBoard(const Board &B){   
+    **char board;
+    board = new char *[B.config.m];
+    for (int i = 0; i < B.config.m; i++)
+    {
+        for (int j = 0; j < B.config.n; j++)
+            board[i][j] = B.c[i][j].c;
+    }
+    return board;
+}
+
 Board generateBoard(GameConfig config)
 {
   if (config.m * config.n % 2 == 0) 
