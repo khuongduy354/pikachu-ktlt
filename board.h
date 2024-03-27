@@ -29,6 +29,6 @@ struct Board
 void drawCell();
 void deleteCell();
 Board generateBoard (GameConfig config);
-**char toCharBoard(Board B); // convert board to char array (for easier pathfinding)
+char** toCharBoard(Board B); // convert board to char array (for easier pathfinding)
 void showBoard();
 void deleteBoard();
