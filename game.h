@@ -28,8 +28,6 @@ class GameManager {
   // get cell based on position
   Cell *getCell(VECI pos);
 
-  VECI getCoorFromCell(Cell c) { return VECI{c.i, c.j}; };
-
   // check if 2 selected cells match
   void checkForMatching();
 

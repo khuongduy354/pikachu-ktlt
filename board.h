@@ -5,6 +5,7 @@
 #include <random>
 
 #include "console.h"
+#include "utils.h"
 
 struct GameConfig {
   int m;               // length
@@ -16,9 +17,14 @@ struct GameConfig {
 };
 
 struct Cell {
-  int i, j;
+  // cell's coordinate
+  VECI pos;
+
+  // cell's character
   char c = ' ';
-  int state = 0;  // 1 selected, 0 normal, -1 deleted
+
+  // 1 selected, 0 normal, -1 deleted
+  int state = 0;
 };
 
 struct Board {

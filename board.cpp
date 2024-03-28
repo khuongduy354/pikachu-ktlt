@@ -13,7 +13,7 @@ void drawCell(Cell c, int color) {
   // check the state of cell, -1 means deleted cell
   if (c.state == -1) return;
   // draw border of the cell
-  int x = c.j + 1, y = c.i + 1;
+  int x = c.pos.second + 1, y = c.pos.first + 1;
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
     cout << box[i];
@@ -41,7 +41,7 @@ void drawCell(Cell c, int color) {
 }
 
 void deleteCell(Cell c) {
-  int x = c.j + 1, y = c.i + 1;
+  int x = c.pos.second + 1, y = c.pos.first + 1;
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
     std::cout << "           ";
@@ -95,8 +95,8 @@ Board generateBoard(GameConfig config) {
     for (int i = 0; i < config.m; i++) {
       B.c[i] = new Cell[config.n];
       for (int j = 0; j < config.n; j++) {
-        B.c[i][j].i = i;
-        B.c[i][j].j = j;
+        B.c[i][j].pos.first = i;
+        B.c[i][j].pos.second = j;
         B.c[i][j].c = chars[getRandomInt(0, config.m * config.n - 1)];
         B.c[i][j].state = 0;
       }

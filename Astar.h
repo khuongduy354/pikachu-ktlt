@@ -83,4 +83,4 @@ class AstarGrid {
   vector<Point> trace_path(const Point &target);
   bool is_out_of_bound(Point p);
 };
-Point VeciToPoint(pair<int, int> veci);
+Point veciToPoint(pair<int, int> veci);

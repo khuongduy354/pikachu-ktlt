@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Point VeciToPoint(pair<int, int> veci) {
+Point veciToPoint(pair<int, int> veci) {
   return Point{veci.first, veci.second};
 };
 
