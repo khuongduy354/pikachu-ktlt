@@ -1,0 +1,177 @@
+[33mcommit 1c2ad123449f67cfeac98d2ef0961c2db9ca930a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 20:31:45 2024 +0700
+
+    chore: update char board when matched
+
+[33mcommit 2d3465c38dbc3f6b454ee514727c810210439438[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 20:24:45 2024 +0700
+
+    fix: astar path
+
+[33mcommit 438e7eff7b08c0181b8d103a15f51219f41e3aa2[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 20:22:01 2024 +0700
+
+    refractor: Point use VECI
+
+[33mcommit 9b8979027dcca560e73cbbff92428e5e7a2cbd15[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 20:10:24 2024 +0700
+
+    refractor: unify VECI for coordinates
+
+[33mcommit 6da9ff35b2241d0f51965c63823f13d8446a27bb[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 19:56:58 2024 +0700
+
+    fix: namespace, vector for paths result
+
+[33mcommit c78fe160b304d663e552ccdf2443b6732836bd3e[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 19:32:52 2024 +0700
+
+    refractor: split game class, utils
+
+[33mcommit 13c8560624bc8b530b2a0f0284e28fad73a187c8[m
+Author: quynh <pnquynh0210@gmail.com>
+Date:   Thu Mar 28 16:54:30 2024 +0700
+
+    them tinh nang
+
+[33mcommit cab156f757f1752082bb68864d5e68e06c6d06c2[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 16:08:53 2024 +0700
+
+    feat: working Astar for basic
+
+[33mcommit 8ea5c05d4220713bcffb58cfaa6166c9bdc451a0[m
+Merge: e14ab41 9754a66
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 13:04:27 2024 +0700
+
+    Merge branch 'master' of https://github.com/khuongduy354/pikachu-ktlt
+
+[33mcommit e14ab418962efae2c33b67d74f7fad756b3f114b[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 13:01:41 2024 +0700
+
+    fix: namespace + tocharboard
+
+[33mcommit 9754a665d24fcda5b4f8c94d45c12f0966c7dea3[m
+Author: pnquyn <163632689+pnquyn@users.noreply.github.com>
+Date:   Thu Mar 28 12:35:26 2024 +0700
+
+    board.cpp
+
+[33mcommit 7b4c802a7c485e29d25c3838c8e8733bd00cde22[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 00:38:49 2024 +0700
+
+    refractor: AStar header
+
+[33mcommit 281612d875d5189df904f35407b7c77994446033[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Thu Mar 28 00:29:02 2024 +0700
+
+    feat: working select cells + moving cursor
+
+[33mcommit 776d964b9e727221823fd65c497fe03d118897b0[m
+Author: khuongduy354 <khuongduy354@gmail.com>
+Date:   Wed Mar 27 23:09:02 2024 +0700
+
+    chore:setup build
+
+[33mcommit e5bb32d631856cb340c6f3663dfd5abddf09d1b1[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Wed Mar 27 22:32:41 2024 +0700
+
+    feat: convert to char board
+
+[33mcommit 3952b094f0de92554483132ec2a9f65764763dbe[m
+Merge: c7841dc 62550b6
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Wed Mar 27 22:28:10 2024 +0700
+
+    Merge branch 'master' of https://github.com/khuongduy354/pikachu-ktlt
+
+[33mcommit 62550b63713142a77d7961282451eca53b50c2d8[m
+Author: pnquyn <163632689+pnquyn@users.noreply.github.com>
+Date:   Tue Mar 26 18:50:29 2024 +0700
+
+    board.cpp
+
+[33mcommit c7841dc4489af63935c044670b1103070b289962[m
+Merge: af79b38 87b239b
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Mon Mar 25 21:50:24 2024 +0700
+
+    Merge branch 'master' of https://github.com/khuongduy354/pikachu-ktlt
+
+[33mcommit 87b239b1e2d67aacc01308475aa79358770be735[m
+Author: pnquyn <163632689+pnquyn@users.noreply.github.com>
+Date:   Mon Mar 25 15:47:37 2024 +0700
+
+    Add files via upload
+
+[33mcommit 7d877eb6c476da62d0e26927607d3d84a1ef42b0[m
+Author: Khương Duy <42113313+khuongduy354@users.noreply.github.com>
+Date:   Sun Mar 24 14:38:01 2024 +0700
+
+    Update README.md
+
+[33mcommit af79b3890e5502a25821b945fef9cb552b30190d[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Sat Mar 23 15:27:17 2024 +0700
+
+    feat: traceable path
+
+[33mcommit 48c75665ba7831e6df17365344d7f7392bcf4574[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Sat Mar 23 11:20:07 2024 +0700
+
+    feat: parent of points +turning cost
+
+[33mcommit 7b0f495be76bbdba2a3b57a45adef38dd7c858e7[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Sat Mar 23 11:05:25 2024 +0700
+
+    test: working AStar without turning points
+
+[33mcommit cc6f399b79e6163698ae3afd25f0a4d1ffb220e9[m
+Merge: c57d2d1 b0806ad
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 15:36:16 2024 +0700
+
+    Merge branch 'master' of https://github.com/khuongduy354/pikachu-ktlt
+
+[33mcommit c57d2d1feb4d2fb906c330fcbf9f4e5e03b15fa5[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 15:36:01 2024 +0700
+
+    chore: add dev.md
+
+[33mcommit b0806ad7a26844cb130b8f5a49b7b6737b413ba7[m
+Author: Khương Duy <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 15:13:44 2024 +0700
+
+    Update README.md
+
+[33mcommit 0ede1097665a9ba6a8fc122e53a6051dcca74ef8[m
+Author: Khương Duy <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 15:13:16 2024 +0700
+
+    Update README.md
+
+[33mcommit 4b3c12d642b75c413fd0e74bc79f1059057b4481[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 14:55:03 2024 +0700
+
+    chore: rename
+
+[33mcommit 7a2cb1f6106cdc71a7571b76c9adfc90d92205a0[m
+Author: khuongduy354 <42113313+khuongduy354@users.noreply.github.com>
+Date:   Tue Mar 19 14:53:56 2024 +0700
+
+    setup: A* pathfinding

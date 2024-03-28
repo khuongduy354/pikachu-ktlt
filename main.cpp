@@ -15,16 +15,10 @@ int main() {
   while (true) {
     system("cls");
     game.displayBoard();
-
-    char kb;
-    cin >> kb;
-
-    if (kb == 'w' || kb == 's' || kb == 'a' || kb == 'd') {
-      VECI dir = mapCharToPairDir(kb);
-      game.moveCursor(dir);
-    }
-    if (kb == 'p') {
+    VECI dir = getConsoleInput();
+    if (dir.first == -2 && dir.second == -2)
       game.pickCell();
-    }
+    else
+      game.moveCursor(dir); 
   }
 }
