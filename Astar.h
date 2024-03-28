@@ -6,16 +6,14 @@
 #include <unordered_map>
 #include <vector>
 
-#ifndef INT_MAX
-#define INT_MAX 2147483647
-#endif
+// avoid global std namespace due to packages conflict
+using std::pair, std::priority_queue, std::unordered_map, std::vector,
+    std::cout, std::endl;
 
+// null point for function returning point, indicating not found, not valid
 #define NULL_POINT \
   Point { -1, -1 }
-#define MAX_ARR_SIZE 100
 
-namespace Astar {
-using namespace std;
 struct Point {
   int x;
   int y;
@@ -73,7 +71,7 @@ class AstarGrid {
   AstarGrid(char **board, int _m, int _n);
 
   // A* search algorithm, return full path of Points
-  vector<Point> *find_path(const Point &start, const Point &end);
+  vector<Point> find_path(const Point &start, const Point &end);
   int m;
   int n;
   void display_board();
@@ -82,8 +80,7 @@ class AstarGrid {
   char **board;
   CostTracker cost_tracker;
   float cal_cost(const Point &curr, const Point &start, const Point &end);
-  vector<Point> *trace_path(const Point &target);
+  vector<Point> trace_path(const Point &target);
   bool is_out_of_bound(Point p);
 };
 Point VeciToPoint(pair<int, int> veci);
-}  // namespace Astar

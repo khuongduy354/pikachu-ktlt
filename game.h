@@ -14,7 +14,7 @@ class GameManager {
   VECI c_idx;
 
   // pathfinder
-  Astar::AstarGrid *pathfinder = NULL;
+  AstarGrid *pathfinder = NULL;
 
  public:
   GameManager(GameConfig config);

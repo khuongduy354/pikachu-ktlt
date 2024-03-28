@@ -1,9 +1,8 @@
 #include "Astar.h"
 
 #include <iostream>
-using namespace Astar;
 
-Point Astar::VeciToPoint(pair<int, int> veci) {
+Point VeciToPoint(pair<int, int> veci) {
   return Point{veci.first, veci.second};
 };
 
@@ -32,21 +31,22 @@ AstarGrid::AstarGrid(char **board, int _m, int _n) {
   this->n = _n;
 }
 
-vector<Point> *AstarGrid::trace_path(const Point &target) {
-  if (target == NULL_POINT) {
-    return NULL;
-  }
+vector<Point> AstarGrid::trace_path(const Point &target) {
+  vector<Point> result = {};
 
-  vector<Point> *result = new vector<Point>;
+  // NULL_POINT means no path found, return empty vector
+  if (target == NULL_POINT) result;
+
+  // first target is ending point
   Point curr = target;
-  result->push_back(curr);
+  result.push_back(curr);
 
+  // keep tracing back until hit NULL
   while (curr.parent != NULL) {
     curr = *curr.parent;
-    result->push_back(curr);
+    result.push_back(curr);
   }
 
-  if (result->size() == 0) return NULL;
   return result;
 }
 
@@ -55,8 +55,7 @@ bool AstarGrid::is_out_of_bound(Point p) {
   return true;
 };
 
-vector<Astar::Point> *AstarGrid::find_path(const Point &start,
-                                           const Point &end) {
+vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
   // STEP 1: Find the path
   cost_tracker = CostTracker();
   Point target = start;
@@ -92,10 +91,6 @@ vector<Astar::Point> *AstarGrid::find_path(const Point &start,
 
   // STEP 2: Trace back the path
   // if target is NULL_POINT, no path found, can't trace path
-  if (target == NULL_POINT) {
-    return NULL;
-  }
-
   return trace_path(target);
 };
 

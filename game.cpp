@@ -7,8 +7,7 @@ GameManager::GameManager(GameConfig config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
   this->B.c[0][0].state = 1;
-  this->pathfinder =
-      new Astar::AstarGrid(toCharBoard(this->B), config.m, config.n);
+  this->pathfinder = new AstarGrid(toCharBoard(this->B), config.m, config.n);
 };
 
 void GameManager::displayBoard() { showBoard(B); };
@@ -54,16 +53,15 @@ void GameManager::checkForMatching() {
   if (selected_pair.first == NULL || selected_pair.second == NULL) return;
 
   //  setup astar
-  Astar::Point start =
-      Astar::VeciToPoint(getCoorFromCell(*selected_pair.first));
-  Astar::Point end = Astar::VeciToPoint(getCoorFromCell(*selected_pair.second));
-  vector<Astar::Point> *paths = pathfinder->find_path(start, end);
+  Point start = VeciToPoint(getCoorFromCell(*selected_pair.first));
+  Point end = VeciToPoint(getCoorFromCell(*selected_pair.second));
+  vector<Point> paths = pathfinder->find_path(start, end);
 
   selected_pair.first->state = 0;
   selected_pair.second->state = 0;
 
   // found
-  if (paths != NULL) {
+  if (paths.size() > 0) {
     selected_pair.first->c = ' ';
     selected_pair.second->c = ' ';
 

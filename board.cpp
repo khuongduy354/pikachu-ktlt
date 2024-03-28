@@ -1,5 +1,4 @@
 #include "board.h"
-using namespace std;
 
 // border of a cell
 char box[5][12] = {{" --------- "},
@@ -9,6 +8,8 @@ char box[5][12] = {{" --------- "},
                    {" --------- "}};
 // Function to draw a cell in the board
 void drawCell(Cell c, int color) {
+  using namespace std;
+
   // check the state of cell, -1 means deleted cell
   if (c.state == -1) return;
   // draw border of the cell
@@ -16,7 +17,6 @@ void drawCell(Cell c, int color) {
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
     cout << box[i];
-    
   }
   // 1 means selected cell
   if (c.state == 1) {
@@ -44,12 +44,14 @@ void deleteCell(Cell c) {
   int x = c.j + 1, y = c.i + 1;
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
-    cout << "           ";
+    std::cout << "           ";
   }
 }
 // function to generate distinct random int for generating board in
 // generateBoard function below
 int getRandomInt(int begin, int end) {
+  using namespace std;
+
   static random_device rd;
   static mt19937 mt(rd());
   uniform_int_distribution<int> dist(begin, end);
