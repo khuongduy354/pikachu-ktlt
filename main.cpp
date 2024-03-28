@@ -13,18 +13,19 @@ int main() {
   GameManager game = GameManager(config);
 
   while (true) {
-    system("cls");
+    cls();
     game.displayBoard();
 
     char kb;
-    cin >> kb;
+    // cin >> kb;
 
-    if (kb == 'w' || kb == 's' || kb == 'a' || kb == 'd') {
-      VECI dir = mapCharToPairDir(kb);
-      game.moveCursor(dir);
-    }
-    if (kb == 'p') {
-      game.pickCell();
-    }
+    // if (kb == 'w' || kb == 's' || kb == 'a' || kb == 'd') {
+    //   VECI dir = mapCharToPairDir(kb);
+    //   game.moveCursor(dir);
+    // }
+    // if (kb == 'p') {
+    //   game.pickCell();
+    // }
+    Sleep(10 / 6);
   }
 }

@@ -9,8 +9,12 @@
 #include "utils.h"
 
 // avoid global std namespace due to packages conflict
-using std::pair, std::priority_queue, std::unordered_map, std::vector,
-    std::cout, std::endl;
+using std::cout;
+using std::endl;
+using std::pair;
+using std::priority_queue;
+using std::unordered_map;
+using std::vector;
 
 // null point for function returning point, indicating not found, not valid
 #define NULL_POINT  \

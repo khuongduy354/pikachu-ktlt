@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 #include <utility>
 
 // pair<int,int> use as integer vector (for coordinates)
@@ -13,3 +15,5 @@
 
 // map input key to directions
 VECI mapCharToPairDir(char a);
+
+void cls();
