@@ -69,7 +69,6 @@ vector<Astar::Point> *AstarGrid::find_path(const Point &start,
       Point neighbor = target + dir;
       // skip obstacles or out of bound target
       if (is_out_of_bound(neighbor)) {
-        std::cout << "Out of bound";
         continue;
       }
       char n_char = board[neighbor.x][neighbor.y];
