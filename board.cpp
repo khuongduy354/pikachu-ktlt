@@ -16,6 +16,7 @@ void drawCell(Cell c, int color) {
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
     cout << box[i];
+    
   }
   // 1 means selected cell
   if (c.state == 1) {
