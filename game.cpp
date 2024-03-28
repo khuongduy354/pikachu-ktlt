@@ -7,7 +7,8 @@ GameManager::GameManager(GameConfig config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
   this->B.c[0][0].state = 1;
-  this->pathfinder = new AstarGrid(toCharBoard(this->B), config.m, config.n);
+  this->b = toCharBoard(this->B);
+  this->pathfinder = new AstarGrid(this->b, config.m, config.n);
 };
 
 void GameManager::displayBoard() { showBoard(B); };
@@ -49,23 +50,28 @@ Cell *GameManager::getCell(VECI pos) {
 };
 
 void GameManager::checkForMatching() {
+  Cell *cell_1 = selected_pair.first;
+  Cell *cell_2 = selected_pair.second;
+
   // must have 2 selected cell.
-  if (selected_pair.first == NULL || selected_pair.second == NULL) return;
+  if (cell_1 == NULL || cell_2 == NULL) return;
 
   //  setup astar
-  Point start = Point{selected_pair.first->pos};
-  Point end = Point{selected_pair.second->pos};
+  Point start = Point{cell_1->pos};
+  Point end = Point{cell_2->pos};
   vector<Point> paths = pathfinder->find_path(start, end);
 
-  selected_pair.first->state = 0;
-  selected_pair.second->state = 0;
+  cell_1->state = 0;
+  cell_2->state = 0;
 
   // found
   if (paths.size() > 0) {
-    selected_pair.first->c = ' ';
-    selected_pair.second->c = ' ';
+    cell_1->c = ' ';
+    cell_2->c = ' ';
 
-    // TODO: update AStar grid here
+    // update char board
+    b[cell_1->pos.first][cell_1->pos.second] = ' ';
+    b[cell_2->pos.first][cell_2->pos.second] = ' ';
   }
 
   selected_pair.first = NULL;

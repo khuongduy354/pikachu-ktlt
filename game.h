@@ -5,7 +5,8 @@
 #include "utils.h"
 
 class GameManager {
-  Board B;
+  Board B;  // Board representation (for rendering)
+  char** b; //char board representation (for pathfinding)
 
   // selected pair
   std::pair<Cell *, Cell *> selected_pair{NULL, NULL};
