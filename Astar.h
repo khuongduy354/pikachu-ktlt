@@ -1,5 +1,6 @@
 #include <math.h>
 
+#include <iostream>
 #include <queue>
 #include <unordered_map>
 #include <vector>
@@ -68,15 +69,20 @@ class CostTracker {  // In A* algorithm, we need to pick the point with the
 
 class AstarGrid {
  public:
-  AstarGrid(char **board);
+  AstarGrid(char **board, int _m, int _n);
 
   // A* search algorithm, return full path of Points
   vector<Point> *find_path(const Point &start, const Point &end);
+  int m;
+  int n;
+  void display_board();
 
  private:
   char **board;
   CostTracker cost_tracker;
   float cal_cost(const Point &curr, const Point &start, const Point &end);
   vector<Point> *trace_path(const Point &target);
+  bool is_out_of_bound(Point p);
 };
+Point VeciToPoint(pair<int, int> veci);
 }  // namespace Astar

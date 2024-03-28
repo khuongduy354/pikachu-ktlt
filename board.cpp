@@ -58,8 +58,8 @@ int getRandomInt(int begin, int end) {
 char **toCharBoard(Board B) {
   char **board = new char *[B.config.m];
   for (int i = 0; i < B.config.m; i++) {
+    board[i] = new char[B.config.n];
     for (int j = 0; j < B.config.n; j++) {
-      board[i] = new char[B.config.n];
       board[i][j] = B.c[i][j].c;
     }
   }
@@ -108,6 +108,9 @@ Board generateBoard(GameConfig config) {
 }
 // function to draw the whole board on the screen
 void showBoard(Board &B) {
-  for (int i = 0; i < B.config.m; i++)
-    for (int j = 0; j < B.config.n; j++) drawCell(B.c[i][j], 112);
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      drawCell(B.c[i][j], 112);
+    }
+  }
 }

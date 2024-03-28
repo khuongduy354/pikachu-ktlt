@@ -25,7 +25,8 @@ class GameManager {
     this->B = generateBoard(config);
     c_idx = VECI{0, 0};
     this->B.c[0][0].state = 1;
-    this->pathfinder = new Astar::AstarGrid(toCharBoard(this->B));
+    this->pathfinder =
+        new Astar::AstarGrid(toCharBoard(this->B), config.m, config.n);
   }
 
   static VECI mapCharToPairDir(char a) {
@@ -80,8 +81,35 @@ class GameManager {
     }
     return NULL;
   }
-  void checkForMatching(){
+  VECI getCoorFromCell(Cell c) { return VECI{c.i, c.j}; };
+  void checkForMatching() {
+    // must have 2 selected cell.
+    if (selected_pair.first == NULL || selected_pair.second == NULL) return;
 
+    //  setup astar
+    Astar::Point start =
+        Astar::VeciToPoint(getCoorFromCell(*selected_pair.first));
+    Astar::Point end =
+        Astar::VeciToPoint(getCoorFromCell(*selected_pair.second));
+    vector<Astar::Point> *paths = pathfinder->find_path(start, end);
+
+    selected_pair.first->state = 0;
+    selected_pair.second->state = 0;
+
+    // found
+    if (paths != NULL) {
+      selected_pair.first->c = ' ';
+      selected_pair.second->c = ' ';
+
+      // TODO: update AStar grid here
+    }
+
+    selected_pair.first = NULL;
+    selected_pair.second = NULL;
+
+    // highlight cell under cursor
+    Cell *c_under_cursor = getCell(c_idx);
+    if (c_under_cursor != NULL) c_under_cursor->state = 1;
   };
   void pickCell() {
     Cell *c_under_cursor = getCell(c_idx);
@@ -102,6 +130,7 @@ class GameManager {
     }
   }
 };
+
 int main() {
   srand((time(nullptr)));
 
@@ -110,7 +139,7 @@ int main() {
   GameManager game = GameManager(config);
 
   while (true) {
-    // system("cls");
+    system("cls");
     game.displayBoard();
 
     char kb;

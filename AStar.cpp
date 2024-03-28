@@ -1,5 +1,11 @@
 #include "Astar.h"
+
+#include <iostream>
 using namespace Astar;
+
+Point Astar::VeciToPoint(pair<int, int> veci) {
+  return Point{veci.first, veci.second};
+};
 
 // CostTracker implementation
 void CostTracker::insert(Point a, float cost) {
@@ -20,14 +26,18 @@ Point CostTracker::pop_point_with_least_cost() {
 }
 
 // AStar implementation
-AstarGrid::AstarGrid(char **board) { this->board = board; }
+AstarGrid::AstarGrid(char **board, int _m, int _n) {
+  this->board = board;
+  this->m = _m;
+  this->n = _n;
+}
 
 vector<Point> *AstarGrid::trace_path(const Point &target) {
   if (target == NULL_POINT) {
     return NULL;
   }
 
-  vector<Point> *result = new vector<Point>();
+  vector<Point> *result = new vector<Point>;
   Point curr = target;
   result->push_back(curr);
 
@@ -36,52 +46,59 @@ vector<Point> *AstarGrid::trace_path(const Point &target) {
     result->push_back(curr);
   }
 
+  if (result->size() == 0) return NULL;
   return result;
 }
-vector<Point> *AstarGrid::find_path(const Point &start, const Point &end){{
 
-    // STEP 1: Find the path
-    cost_tracker = CostTracker();
-char start_letter = board[start.x][start.y];
-Point target = start;
+bool AstarGrid::is_out_of_bound(Point p) {
+  if (p.x >= 0 && p.x < m && p.y >= 0 && p.y < n) return false;
+  return true;
+};
 
-// Calculate cost for neighbors, starting from start point
-while (target != end && target != NULL_POINT) {
-  // calculate cost of neighbors
-  Point dirs[4] = {Point{0, 1}, Point{0, -1}, Point{1, 0}, Point{-1, 0}};
-  for (Point dir : dirs) {
-    Point neighbor = target + dir;
-    // skip obstacles
-    char n_char = board[neighbor.x][neighbor.y];
-    if (n_char == '\0' || (n_char != ' ' && neighbor != end)) continue;
+vector<Astar::Point> *AstarGrid::find_path(const Point &start,
+                                           const Point &end) {
+  // STEP 1: Find the path
+  cost_tracker = CostTracker();
+  Point target = start;
 
-    // set parent for path tracing
-    Point *parent = new Point(target);
-    neighbor.parent = parent;
+  // Calculate cost for neighbors, starting from start point
+  while (target != end && target != NULL_POINT) {
+    // calculate cost of neighbors
+    Point dirs[4] = {Point{0, 1}, Point{0, -1}, Point{1, 0}, Point{-1, 0}};
+    for (Point dir : dirs) {
+      Point neighbor = target + dir;
+      // skip obstacles or out of bound target
+      if (is_out_of_bound(neighbor)) {
+        std::cout << "Out of bound";
+        continue;
+      }
+      char n_char = board[neighbor.x][neighbor.y];
+      if (n_char == '\0' || (n_char != ' ' && neighbor != end)) continue;
 
-    // evaluate cost
-    float cost = cal_cost(neighbor, start, end);
+      // set parent for path tracing
+      Point *parent = new Point(target);
+      neighbor.parent = parent;
 
-    // only track target that turn once or twice
-    if (cost <= 3000) cost_tracker.insert(neighbor, cost);
+      // evaluate cost
+      float cost = cal_cost(neighbor, start, end);
+
+      // only track target that turn once or twice
+      if (cost <= 3000) cost_tracker.insert(neighbor, cost);
+    }
+
+    // pick next lowest cost target
+    target = cost_tracker.pop_point_with_least_cost();
+    // continue until target reach destination
   }
 
-  // pick next lowest cost target
-  target = cost_tracker.pop_point_with_least_cost();
-  // continue until target reach destination
-}
+  // STEP 2: Trace back the path
+  // if target is NULL_POINT, no path found, can't trace path
+  if (target == NULL_POINT) {
+    return NULL;
+  }
 
-// STEP 2: Trace back the path
-
-// if target is NULL_POINT, no path found, can't trace path
-if (target == NULL_POINT) {
-  return NULL;
-}
-
-return trace_path(target);
-}
-}
-;
+  return trace_path(target);
+};
 
 float AstarGrid::cal_cost(const Point &curr, const Point &start,
                           const Point &end) {
@@ -110,4 +127,13 @@ float AstarGrid::cal_cost(const Point &curr, const Point &start,
     return f + 1000;
   }
   return f;
+};
+
+void AstarGrid::display_board() {
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      cout << this->board[i][j] << " ";
+    }
+    cout << endl;
+  }
 };
