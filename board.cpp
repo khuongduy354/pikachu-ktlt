@@ -1,22 +1,27 @@
 #include "board.h"
 using namespace std;
 
+// border of a cell
 char box[5][12] = {{" --------- "},
                    {"|         |"},
                    {"|         |"},
                    {"|         |"},
                    {" --------- "}};
-
+// Function to draw a cell in the board
 void drawCell(Cell c, int color) {
+  // check the state of cell, -1 means deleted cell
   if (c.state == -1) return;
+  // draw border of the cell
   int x = c.j + 1, y = c.i + 1;
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
     cout << box[i];
   }
+  // 1 means selected cell
   if (c.state == 1) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            color + (c.c % 6 + 1));  // white background
+                            color + (c.c % 6 + 1));
+    // draw white background
     for (int i = 1; i < 4; i++) {
       goToXY(x * 10 + 1, y * 4 + i);
       cout << "         ";
@@ -24,7 +29,9 @@ void drawCell(Cell c, int color) {
     goToXY(x * 10 + 5, y * 4 + 2);
     cout << c.c;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-  } else {
+  }
+  // normal state
+  else {
     goToXY(x * 10 + 5, y * 4 + 2);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c.c % 6 + 1);
     cout << c.c;
@@ -39,14 +46,15 @@ void deleteCell(Cell c) {
     cout << "           ";
   }
 }
-
+// function to generate distinct random int for generating board in
+// generateBoard function below
 int getRandomInt(int begin, int end) {
   static random_device rd;
   static mt19937 mt(rd());
   uniform_int_distribution<int> dist(begin, end);
   return dist(mt);
 }
-
+// function to get generated chars in the board
 char **toCharBoard(Board B) {
   char **board = new char *[B.config.m];
   for (int i = 0; i < B.config.m; i++) {
@@ -57,7 +65,7 @@ char **toCharBoard(Board B) {
   }
   return board;
 }
-
+// function to generate board
 Board generateBoard(GameConfig config) {
   if (config.m * config.n % 2 == 0) {
     // Generate random chars
@@ -66,12 +74,14 @@ Board generateBoard(GameConfig config) {
     for (int i = 0; i < config.distinct_chars; i++)
       ran_chars[i] = static_cast<char>(getRandomInt(65, 90));
     // Generate board
+    // Generate total chars of the board form random chars generated above
     char *chars;
     chars = new char[config.m * config.n];
     int index = 0;
     for (int i = 0; i < config.distinct_chars; i++)
       for (int j = 0; j < config.char_occurences[i]; j++)
         chars[index++] = ran_chars[i];
+    // attach the value of game configures to that of Board
     Board B;
     B.config.m = config.m;
     B.config.n = config.n;
@@ -96,7 +106,7 @@ Board generateBoard(GameConfig config) {
     return b;
   }
 }
-
+// function to draw the whole board on the screen
 void showBoard(Board &B) {
   for (int i = 0; i < B.config.m; i++)
     for (int j = 0; j < B.config.n; j++) drawCell(B.c[i][j], 112);
