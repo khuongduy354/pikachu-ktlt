@@ -33,7 +33,7 @@ vector<Point> AstarGrid::trace_path(const Point &target) {
   vector<Point> result = {};
 
   // NULL_POINT means no path found, return empty vector
-  if (target == NULL_POINT) result;
+  if (target == NULL_POINT) return result;
 
   // first target is ending point
   Point curr = target;
@@ -91,7 +91,6 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
   }
 
   // STEP 2: Trace back the path
-  // if target is NULL_POINT, no path found, can't trace path
   return trace_path(target);
 };
 
