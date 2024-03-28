@@ -1,27 +1,26 @@
-#include <random>
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "console.h"
-using namespace std;
+#include <iostream>
+#include <random>
 
-struct GameConfig
-{
-  int m;                   // length
-  int n;                   // width
-  int distinct_chars;      // number of distinct chars appear in the generated board
-  int char_occurences[26]; // number of occurences of each char, under the condition that sum of array is equal to length * width
+#include "console.h"
+
+struct GameConfig {
+  int m;               // length
+  int n;               // width
+  int distinct_chars;  // number of distinct chars appear in the generated board
+  int char_occurences[26];  // number of occurences of each char, under the
+                            // condition that sum of array is equal to length *
+                            // width
 };
 
-struct Cell
-{
+struct Cell {
   int i, j;
   char c = ' ';
-  int state = 0; // 1 selected, 0 normal, -1 deleted
+  int state = 0;  // 1 selected, 0 normal, -1 deleted
 };
 
-struct Board
-{
+struct Board {
   GameConfig config;
   Cell **c;
 };
@@ -29,6 +28,7 @@ struct Board
 void drawCell();
 void deleteCell();
 Board generateBoard(GameConfig config);
-char **toCharBoard(Board B); // convert board to char array (for easier pathfinding)
+char **toCharBoard(
+    Board B);  // convert board to char array (for easier pathfinding)
 void showBoard(Board &B);
 void deleteBoard();
