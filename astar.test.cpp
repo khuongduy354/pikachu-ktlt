@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "board.h"
+#include "utils.h"
 
 char **setup_board(char b[100][100], int size) {
   char **board = new char *[size];
@@ -30,7 +31,8 @@ int basic_finding() {
   char **board = setup_board(b1, 10);
   AstarGrid astar = AstarGrid(board, 10, 10);
   //   cout << "Scan order: " << endl;
-  std::vector<Point> path = astar.find_path(Point{1, 1}, Point{8, 8});
+  std::vector<Point> path =
+      astar.find_path(Point{VECI{1, 1}}, Point{VECI{8, 8}});
   if (path.size() == 0) {
     std::cout << "No path found" << std::endl;
   } else {
@@ -38,7 +40,8 @@ int basic_finding() {
     std::cout << "Found Path size: " << path.size() << std::endl;
     std::cout << "Path from destination to start: " << std::endl;
     for (Point p : path) {
-      std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
+      std::cout << "(" << p.pos.first << ", " << p.pos.second << ")"
+                << std::endl;
     }
   }
 }

@@ -53,8 +53,8 @@ void GameManager::checkForMatching() {
   if (selected_pair.first == NULL || selected_pair.second == NULL) return;
 
   //  setup astar
-  Point start = veciToPoint(selected_pair.first->pos);
-  Point end = veciToPoint(selected_pair.second->pos);
+  Point start = Point{selected_pair.first->pos};
+  Point end = Point{selected_pair.second->pos};
   vector<Point> paths = pathfinder->find_path(start, end);
 
   selected_pair.first->state = 0;

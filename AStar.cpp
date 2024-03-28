@@ -2,9 +2,7 @@
 
 #include <iostream>
 
-Point veciToPoint(pair<int, int> veci) {
-  return Point{veci.first, veci.second};
-};
+#include "utils.h"
 
 // CostTracker implementation
 void CostTracker::insert(Point a, float cost) {
@@ -51,7 +49,9 @@ vector<Point> AstarGrid::trace_path(const Point &target) {
 }
 
 bool AstarGrid::is_out_of_bound(Point p) {
-  if (p.x >= 0 && p.x < m && p.y >= 0 && p.y < n) return false;
+  if (p.pos.first >= 0 && p.pos.first < m && p.pos.second >= 0 &&
+      p.pos.second < n)
+    return false;
   return true;
 };
 
@@ -63,14 +63,15 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
   // Calculate cost for neighbors, starting from start point
   while (target != end && target != NULL_POINT) {
     // calculate cost of neighbors
-    Point dirs[4] = {Point{0, 1}, Point{0, -1}, Point{1, 0}, Point{-1, 0}};
+    Point dirs[4] = {Point{VECI{0, 1}}, Point{VECI{0, -1}}, Point{VECI{1, 0}},
+                     Point{VECI{-1, 0}}};
     for (Point dir : dirs) {
       Point neighbor = target + dir;
       // skip obstacles or out of bound target
       if (is_out_of_bound(neighbor)) {
         continue;
       }
-      char n_char = board[neighbor.x][neighbor.y];
+      char n_char = board[neighbor.pos.first][neighbor.pos.second];
       if (n_char == '\0' || (n_char != ' ' && neighbor != end)) continue;
 
       // set parent for path tracing
@@ -98,7 +99,8 @@ float AstarGrid::cal_cost(const Point &curr, const Point &start,
                           const Point &end) {
   // manhattan distance
   // int g = sqrt(pow(curr.x - start.x,2) + pow(curr.y - start.y,2));
-  float h = sqrt(powf(curr.x - end.x, 2) + powf(curr.y - end.y, 2));
+  float h = sqrt(powf(curr.pos.first - end.pos.first, 2) +
+                 powf(curr.pos.first - end.pos.first, 2));
 
   float f = h;
 
@@ -112,8 +114,10 @@ float AstarGrid::cal_cost(const Point &curr, const Point &start,
   Point *middle = curr.parent;
 
   // check if the 3 points are in the same line
-  bool on_same_x_axis = furthest->x == middle->x && middle->x == curr.x;
-  bool on_same_y_axis = furthest->y == middle->y && middle->y == curr.y;
+  bool on_same_x_axis = furthest->pos.first == middle->pos.first &&
+                        middle->pos.first == curr.pos.first;
+  bool on_same_y_axis = furthest->pos.second == middle->pos.second &&
+                        middle->pos.second == curr.pos.second;
   if (on_same_x_axis || on_same_y_axis) {
     return f;
   } else {

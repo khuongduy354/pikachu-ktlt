@@ -6,17 +6,22 @@
 #include <unordered_map>
 #include <vector>
 
+#include "utils.h"
+
 // avoid global std namespace due to packages conflict
 using std::pair, std::priority_queue, std::unordered_map, std::vector,
     std::cout, std::endl;
 
 // null point for function returning point, indicating not found, not valid
-#define NULL_POINT \
-  Point { -1, -1 }
+#define NULL_POINT  \
+  Point {           \
+    VECI { -1, -1 } \
+  }
 
+// Wrapper type arround VECI coordinate, have reference to previous Point
+// Use especially for Astar
 struct Point {
-  int x;
-  int y;
+  VECI pos;
 
   // use for backtracking & turning point cost calculation
   Point *parent = NULL;
@@ -24,19 +29,21 @@ struct Point {
   // Overload operators for easier calculation
   // Allow Point + Point, Point == Point,...
   bool operator==(const Point &other) const {
-    return x == other.x && y == other.y;
+    return pos.first == other.pos.first && pos.second == other.pos.second;
   }
 
   bool operator!=(const Point &other) const { return !(*this == other); }
 
   Point operator+(const Point &other) const {
-    return Point{x + other.x, y + other.y};
+    int x = pos.first + other.pos.first;
+    int y = pos.second + other.pos.second;
+    return Point{VECI{x, y}};
   }
 
   // Hash function for unordered_map
   struct Hash {
     size_t operator()(const Point &p) const {
-      return std::hash<int>()(p.x) ^ std::hash<int>()(p.y);
+      return std::hash<int>()(p.pos.first) ^ std::hash<int>()(p.pos.first);
     }
   };
 };
@@ -83,4 +90,3 @@ class AstarGrid {
   vector<Point> trace_path(const Point &target);
   bool is_out_of_bound(Point p);
 };
-Point veciToPoint(pair<int, int> veci);
