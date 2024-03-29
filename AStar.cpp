@@ -132,5 +132,49 @@ void AstarGrid::display_board() {
       cout << this->board[i][j] << " ";
     }
     cout << endl;
+  } 
+
+
+}; 
+
+
+pair<Point,Point> AstarGrid::suggest_path(){  
+  // from board, group Points into letter   
+  // each letter (A-Z) has a number of points;
+  vector<Point> letter_points[26];    
+
+  // initialize default array  
+  for(int i = 0; i < 26; i++){ 
+    letter_points[i] = {}; 
+  } 
+
+  for(int i = 0; i < m; i++){ 
+    for(int j = 0; j < n; j++){ 
+      char c = board[i][j]; 
+      if(c >= 'A' && c <= 'Z'){ 
+        letter_points[c - 'A'].push_back(Point{VECI{i,j}}); 
+      }
+    }
+  } 
+
+  // for each letter, find_path for every combination of 2 points  
+  // first path found, return it    
+  for(int i = 0; i < 26; i++){   
+    if(letter_points[i].size() < 2) continue;
+
+
+  // brute force all combination of 2 points, and find_path 
+    for(int j = 0; j < letter_points[i].size(); j++){ 
+      for(int k = j+1; k < letter_points[i].size(); k++){ 
+        vector<Point> path = find_path(letter_points[i][j], letter_points[i][k]); 
+        if(path.size() > 0){ 
+          return {letter_points[i][j], letter_points[i][k]}; 
+        }
+      }
+    }
   }
-};
+
+
+  // after all iteration, none found -> return NULL_POINT
+  return pair{NULL_POINT, NULL_POINT};
+}; 

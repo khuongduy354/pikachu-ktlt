@@ -85,7 +85,10 @@ class AstarGrid {
   vector<Point> find_path(const Point &start, const Point &end);
   int m;
   int n;
-  void display_board();
+  void display_board(); 
+
+  // suggest 2 point that can be matched, if none is found -> return pair of NULL_POINT
+  pair<Point,Point> suggest_path(); 
 
  private:
   char **board;
