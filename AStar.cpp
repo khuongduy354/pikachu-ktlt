@@ -53,9 +53,15 @@ bool AstarGrid::is_out_of_bound(Point p) {
       p.pos.second < n)
     return false;
   return true;
-};
+}; 
 
-vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
+vector<Point> AstarGrid::find_path(const Point &start, const Point &end) { 
+
+  // check if start and end letters are the same 
+  if(board[start.pos.first][start.pos.second] != board[end.pos.first][end.pos.second]){ 
+    return {};  // NO PATH FOUND 
+  } 
+
   // STEP 1: Find the path
   cost_tracker = CostTracker();
   Point target = start;
@@ -67,12 +73,18 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
                      Point{VECI{-1, 0}}};
     for (Point dir : dirs) {
       Point neighbor = target + dir;
-      // skip obstacles or out of bound target
+
+      // skip out of bound (outside board) points
       if (is_out_of_bound(neighbor)) {
         continue;
       }
+
+      // skip obstacles 
       char n_char = board[neighbor.pos.first][neighbor.pos.second];
-      if (n_char == '\0' || (n_char != ' ' && neighbor != end)) continue;
+      if (n_char == '\0') continue;
+
+      // skip lettered cell that is not the target letter
+      if(n_char != ' ' && neighbor != end) continue;
 
       // set parent for path tracing
       Point *parent = new Point(target);
