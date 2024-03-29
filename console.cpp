@@ -43,3 +43,8 @@ void initWindow(int width, int length) {
   hideScrollBar();
   setCursor(0);
 }
+
+// void setConsoleColor(int background, int text)
+// {
+//   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), background * 16 + text);
+// }
