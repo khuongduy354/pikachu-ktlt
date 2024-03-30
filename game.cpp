@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include <algorithm>
 #include <vector>
 using std::vector;
 
@@ -40,6 +41,49 @@ void GameManager::moveCursor(VECI dir) {
   }
 }
 
+void GameManager::scramble() {
+  // save remaining letters to vec
+  vector<char> letters = {};
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      char curr_let = b[i][j];
+      if ('A' <= curr_let && curr_let <= 'Z') {
+        letters.push_back(curr_let);
+      };
+    }
+  }
+
+  // scramble vec
+  std::random_shuffle(letters.begin(), letters.end());
+
+  // generate positions to place letters
+  vector<VECI> positions = {};
+
+  // exclude borders
+  for (int i = 1; i < B.config.m - 1; i++) {
+    for (int j = 1; j < B.config.n - 1; j++) {
+      positions.push_back(VECI{i, j});
+    };
+  };
+  // scramble position
+  std::random_shuffle(positions.begin(), positions.end());
+
+  // put letters into positions
+  for (int i = 0; i < letters.size(); i++) {
+    VECI pos = positions.at(i);
+    char let = letters.at(i);
+
+    b[pos.first][pos.second] = let;
+  }
+
+  // update struct Board
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      B.c[i][j].c = b[i][j];
+    }
+  }
+}
+
 Cell *GameManager::getCell(VECI pos) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
@@ -48,6 +92,16 @@ Cell *GameManager::getCell(VECI pos) {
   }
   return NULL;
 };
+
+bool GameManager::suggestPath() {
+  pair<Point, Point> paths = pathfinder->suggest_path();
+  Point start = paths.first;
+  Point end = paths.second;
+
+  if (start == NULL_POINT || end == NULL_POINT) return false;
+
+  // TODO: draw suggested line
+}
 
 void GameManager::checkForMatching() {
   Cell *cell_1 = selected_pair.first;

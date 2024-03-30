@@ -5,8 +5,8 @@
 #include "utils.h"
 
 class GameManager {
-  Board B;  // Board representation (for rendering)
-  char** b; //char board representation (for pathfinding)
+  Board B;   // Board representation (for rendering)
+  char **b;  // char board representation (for pathfinding)
 
   // selected pair
   std::pair<Cell *, Cell *> selected_pair{NULL, NULL};
@@ -22,6 +22,12 @@ class GameManager {
 
   // draw board with console
   void displayBoard();
+
+  // scramble board;
+  void scramble();
+
+  // draw suggest line, true if suggest path available, false otherwise
+  bool suggestPath();
 
   // move cursor 1 step toward dir
   void moveCursor(VECI dir);
