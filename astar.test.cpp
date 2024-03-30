@@ -65,4 +65,25 @@ int _main2() {
   showBoard(B);
 }
 
-// int main() { basic_finding(); }
+void suggest_path_test() {
+  // 10x10
+  char b1[100][100] = {{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {'x', 'C', 'x', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {'x', 'x', 'x', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {' ', 'B', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                       {'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', ' '},
+                       {'C', ' ', ' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '}};
+
+  char **board = setup_board(b1, 10);
+  AstarGrid astar = AstarGrid(board, 10, 10);
+  pair<Point, Point> paths = astar.suggest_path();
+
+  std::cout << paths.first.pos.first << paths.first.pos.second;
+  std::cout << paths.second.pos.first << paths.second.pos.second;
+}
+
+// int main() { suggest_path_test(); }
