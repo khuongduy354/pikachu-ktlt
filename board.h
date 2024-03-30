@@ -41,3 +41,9 @@ char **toCharBoard(
     Board B);  // convert board to char array (for easier pathfinding)
 void showBoard(Board &B);
 void deleteBoard();
+void drawLineX(VECI pos1, VECI pos2);
+void drawLineY(VECI pos1, VECI pos2);
+void drawLine(VECI pos1, VECI pos2);
+void deleteLineX(VECI pos1, VECI pos2);
+void deleteLineY(VECI pos1, VECI pos2);
+void deleteLine(VECI pos1, VECI pos2);

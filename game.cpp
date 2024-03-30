@@ -64,19 +64,21 @@ void GameManager::checkForMatching() {
   Point start = Point{cell_1->pos};
   Point end = Point{cell_2->pos};
   vector<Point> paths = pathfinder->find_path(start, end);
-
   cell_1->state = 0;
   cell_2->state = 0;
 
   // found
   if (paths.size() > 0) {
     correctCells(cell_1, cell_2);
+    for (int i = 0; i < paths.size() - 1; i++)
+      drawLine(paths[i].pos, paths[i + 1].pos);
     Sleep(120);
     cell_1->c = ' ';
     cell_1->state = -1;
     cell_2->c = ' ';
     cell_2->state = -1;
-    //deleteCells(cell_1, cell_2);
+    for (int i = 0; i < paths.size() - 1; i++)
+      deleteLine(paths[i].pos, paths[i + 1].pos);
 
     // update char board
     b[cell_1->pos.first][cell_1->pos.second] = ' ';

@@ -183,3 +183,85 @@ void showBoard(Board &B) {
     }
   }
 }
+
+//---------------------------------------------------------------
+// draw line
+void drawLineX(VECI pos1, VECI pos2) {
+  int x1, y1, x2, y2;
+  if (pos1 < pos2) {
+    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
+    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  }
+  else {
+    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
+    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+  }
+  for (int i = 0; i < x2 - x1; i++) {
+    goToXY(x1 + i, y1);
+    std::cout << "-";
+  }
+}
+
+void drawLineY(VECI pos1, VECI pos2) {
+  int x1, y1, x2, y2;
+  if (pos1 < pos2) {
+    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
+    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  }
+  else {
+    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
+    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+  }
+  for (int i = 0; i < y2 - y1; i++)
+  {
+    goToXY(x2, y1 + i);
+    std::cout << "|";
+  }
+}
+
+void drawLine(VECI pos1, VECI pos2) {
+  if (pos1.first == pos2.first)
+    drawLineY(pos1, pos2);
+  else 
+    drawLineX(pos1, pos2);
+}
+
+void deleteLineX(VECI pos1, VECI pos2) {
+  int x1, y1, x2, y2;
+  if (pos1 < pos2) {
+    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
+    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  }
+  else {
+    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
+    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+  }
+  for (int i = 0; i < x2 - x1; i++) {
+    goToXY(x1 + i, y1);
+    std::cout << " ";
+  }
+}
+
+void deleteLineY(VECI pos1, VECI pos2) {
+  int x1, y1, x2, y2;
+  if (pos1 < pos2) {
+    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
+    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  }
+  else {
+    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
+    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+  }
+  for (int i = 0; i < y2 - y1; i++)
+  {
+    goToXY(x2, y1 + i);
+    std::cout << " ";
+  }
+}
+
+void deleteLine(VECI pos1, VECI pos2) {
+  if (pos1.first == pos2.first)
+    deleteLineY(pos1, pos2);
+  else 
+    deleteLineX(pos1, pos2);
+}
