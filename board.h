@@ -27,14 +27,16 @@ struct Cell {
   int state = 0;
 };
 
+
+void wrongCells(Cell *c1, Cell *c2);
+void correctCells(Cell *c1, Cell *c2);
+void drawCell();
+
 struct Board {
   GameConfig config;
   Cell **c;
 };
-
-void drawCell();
-void deleteCell();
-Board generateBoard(GameConfig config);
+Board generateBoard(GameConfig &config);
 char **toCharBoard(
     Board B);  // convert board to char array (for easier pathfinding)
 void showBoard(Board &B);

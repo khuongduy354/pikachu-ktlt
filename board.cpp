@@ -6,47 +6,94 @@ char box[5][12] = {{" --------- "},
                    {"|         |"},
                    {"|         |"},
                    {" --------- "}};
-// Function to draw a cell in the board
-void drawCell(Cell c, int color) {
+//Function to draw a cell in the board
+void drawCell(Cell c) {
   using namespace std;
-
-  // check the state of cell, -1 means deleted cell
-  if (c.state == -1) return;
-  // draw border of the cell
-  int x = c.pos.second + 1, y = c.pos.first + 1;
-  if (c.c != '\0') {
-    for (int i = 0; i < 5; i++) {
-    goToXY(x * 10, y * 4 + i);
-    cout << box[i];
-    }
-    // 1 means selected cell
-    if (c.state == 1) {
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color + (c.c % 6 + 1));
-      // draw white background
-      for (int i = 1; i < 4; i++) {
-        goToXY(x * 10 + 1, y * 4 + i);
-        cout << "         ";
-      }
-      goToXY(x * 10 + 5, y * 4 + 2);
-      cout << c.c;
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    }
-    // normal state
-    else {
-      goToXY(x * 10 + 5, y * 4 + 2);
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c.c % 6 + 1);
-      cout << c.c;
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    }
-    }
-}
-
-void deleteCell(Cell c) {
   int x = c.pos.second + 1, y = c.pos.first + 1;
   for (int i = 0; i < 5; i++) {
     goToXY(x * 10, y * 4 + i);
-    std::cout << "           ";
+    cout << box[i];
+    }
+  if (c.state == 1) { //selected 
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 100 + (c.c % 6 + 1)); // draw yellow background
+    for (int i = 1; i < 4; i++) {
+      goToXY(x * 10 + 1, y * 4 + i);
+      cout << "         ";
+      }
+    goToXY(x * 10 + 5, y * 4 + 2);
+    cout << c.c;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    }
+  else if (c.state == 2) { //cursor
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112 + (c.c % 6 + 1)); // draw white background
+    for (int i = 1; i < 4; i++) {
+      goToXY(x * 10 + 1, y * 4 + i);
+      cout << "         ";
+      }
+    goToXY(x * 10 + 5, y * 4 + 2);
+    cout << c.c;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    }
+  else if (c.state == -1) { // deleted
+    for (int i = 1; i < 4; i++) {
+      goToXY(x * 10 + 1, y * 4 + i);
+      cout << "         ";
+        }
   }
+  else { // normal state
+    goToXY(x * 10 + 5, y * 4 + 2);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c.c % 6 + 1);
+    cout << c.c;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    }  
+}
+
+void wrongCells(Cell *c1, Cell *c2)
+{
+  //first cell
+  int x1 = c1->pos.second + 1, y1 = c1->pos.first + 1;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 70 + (c1->c % 6 + 1)); // draw red background
+  for (int i = 1; i < 4; i++) {
+      goToXY(x1 * 10 + 1, y1 * 4 + i);
+      std::cout << "         ";
+      }
+  goToXY(x1 * 10 + 5, y1 * 4 + 2);
+  std::cout << c1->c;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+  //second cell
+  int x2 = c2->pos.second + 1, y2 = c2->pos.first + 1;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 70 + (c2->c % 6 + 1)); // draw red background
+  for (int i = 1; i < 4; i++) {
+      goToXY(x2 * 10 + 1, y2 * 4 + i);
+      std::cout << "         ";
+      }
+  goToXY(x2 * 10 + 5, y2 * 4 + 2);
+  std::cout << c2->c;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+}
+
+void correctCells(Cell *c1, Cell *c2)
+{
+  //first cell
+  int x1 = c1->pos.second + 1, y1 = c1->pos.first + 1;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160 + (c1->c % 6 + 1)); // draw green background
+  for (int i = 1; i < 4; i++) {
+      goToXY(x1 * 10 + 1, y1 * 4 + i);
+      std::cout << "         ";
+      }
+  goToXY(x1 * 10 + 5, y1 * 4 + 2);
+  std::cout << c1->c;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+  //second cell
+  int x2 = c2->pos.second + 1, y2 = c2->pos.first + 1;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160 + (c2->c % 6 + 1)); // draw green background
+  for (int i = 1; i < 4; i++) {
+      goToXY(x2 * 10 + 1, y2 * 4 + i);
+      std::cout << "         ";
+      }
+  goToXY(x2 * 10 + 5, y2 * 4 + 2);
+  std::cout << c2->c;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
 // function to generate distinct random int for generating board in
 // generateBoard function below
@@ -70,7 +117,7 @@ char **toCharBoard(Board B) {
   return board;
 }
 // function to generate board
-Board generateBoard(GameConfig config)
+Board generateBoard(GameConfig &config)
 {
   if (config.m * config.n % 2 == 0)
   {
@@ -102,8 +149,8 @@ Board generateBoard(GameConfig config)
         {
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
-          B.c[i][j].c = '\0';
-          B.c[i][j].state = 0;
+          B.c[i][j].c = ' ';
+          B.c[i][j].state = -1;
         }
         else 
         {
@@ -114,6 +161,10 @@ Board generateBoard(GameConfig config)
         }
       }
     }
+    config.m += 2;
+    config.n += 2;
+    B.config.m += 2;
+    B.config.n += 2;
     delete[] ran_chars;
     delete[] chars;
     return B;
@@ -128,7 +179,7 @@ Board generateBoard(GameConfig config)
 void showBoard(Board &B) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
-      drawCell(B.c[i][j], 112);
+      drawCell(B.c[i][j]);
     }
   }
 }

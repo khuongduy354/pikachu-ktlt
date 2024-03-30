@@ -18,7 +18,7 @@ class GameManager {
   AstarGrid *pathfinder = NULL;
 
  public:
-  GameManager(GameConfig config);
+  GameManager(GameConfig &config);
 
   // draw board with console
   void displayBoard();
