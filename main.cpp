@@ -11,7 +11,8 @@ int main() {
   // Default config
   GameConfig config = {4, 5, 4, {2, 4, 6, 8}};
   GameManager game = GameManager(config);
-  game.start_timer();
+  // game.start_timer(); 
+  int FPS = 60;
 
   while (true) {    
     // HANDLE game finish 
@@ -19,14 +20,16 @@ int main() {
     if(cleared){  
       // TODO: shrink timer here (increase difficulty)
       game = GameManager(config);  
-      game.start_timer();
+      // game.start_timer();
     };
 
     // HANDLE TIMEOUT 
     int time_left = game.time_left;
-    if(time_left == 0){
+    if(time_left <= 0){
       //TODO: add game over here 
 
+    }else{ 
+      time_left-=1/FPS;
     }
     // TODO: game.displayDashboard();
 
@@ -40,5 +43,8 @@ int main() {
     } else {
       game.moveCursor(inp);
     }
-  }
+  } 
+
+  // limit to drawing 60 times per second
+  Sleep(1000/FPS);
 }

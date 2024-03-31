@@ -165,13 +165,13 @@ void GameManager::pickCell() {
   }
 };
 
-void GameManager::start_timer() {
-  Sleep(1000);
-  while (time_left) {
-    time_left--;
-    Sleep(1000);
-  }
-}
+// void GameManager::start_timer() {
+//   Sleep(1000);
+//   while (time_left) {
+//     time_left--;
+//     Sleep(1000);
+//   }
+// }
 
 void GameManager::updateSuggestPair() {
   pair<Point, Point> paths = pathfinder->suggest_path();
