@@ -8,7 +8,7 @@ GameManager::GameManager(GameConfig &config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
   this->cleared = false;
-  this->B.c[0][0].state = 0;
+  this->B.c[0][0].state = 2;
   this->b = toCharBoard(this->B);
   this->pathfinder = new AstarGrid(this->b, config.m, config.n);
   this->timeout_seconds = config.timer;
