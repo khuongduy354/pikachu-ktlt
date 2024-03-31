@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 #include <utility>
 #include <conio.h>
 
@@ -21,4 +23,7 @@
 #define ENTER 13
 
 // map input key to directions
+VECI mapCharToPairDir(char a);
+
+void cls();
 VECI getConsoleInput();

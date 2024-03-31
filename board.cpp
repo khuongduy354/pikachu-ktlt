@@ -142,13 +142,10 @@ Board generateBoard(GameConfig &config)
     for (int i = 0; i < config.distinct_chars; i++)
       B.config.char_occurences[i] = config.char_occurences[i];
     B.c = new Cell *[config.m + 2];
-    for (int i = 0; i < config.m + 2; i++)
-    {
+    for (int i = 0; i < config.m + 2; i++) {
       B.c[i] = new Cell[config.n + 2];
-      for (int j = 0; j < config.n + 2; j++)
-      {
-        if (i == 0 || i == config.m + 1 || j == 0 || j == config.n + 1)
-        {
+      for (int j = 0; j < config.n + 2; j++) {
+        if (i == 0 || i == config.m + 1 || j == 0 || j == config.n + 1) {
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
           B.c[i][j].c = ' ';
@@ -170,9 +167,7 @@ Board generateBoard(GameConfig &config)
     delete[] ran_chars;
     delete[] chars;
     return B;
-  }
-  else
-  {
+  } else {
     Board b;
     return b;
   }
@@ -185,6 +180,7 @@ void showBoard(Board &B) {
     }
   }
 }
+
 
 //---------------------------------------------------------------
 // draw line
