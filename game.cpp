@@ -13,6 +13,7 @@ GameManager::GameManager(GameConfig &config) {
 
 void GameManager::displayBoard() { showBoard(B); };
 void GameManager::displayScore() { drawScore(1, 50, "Quynh"); };
+void GameManager::BackGround() {drawBackground(B); };
 
 void GameManager::moveCursor(VECI dir) {
   // wrap around grid
@@ -71,7 +72,7 @@ void GameManager::checkForMatching() {
   // found
   if (paths.size() > 0) {
     correctCells(cell_1, cell_2);
-    correctSound();
+    //correctSound();
     for (int i = 0; i < paths.size() - 1; i++)
       drawLine(paths[i].pos, paths[i + 1].pos);
     Sleep(120);
@@ -89,7 +90,7 @@ void GameManager::checkForMatching() {
   else 
   {
     wrongCells(cell_1, cell_2);
-    wrongSound();
+    //wrongSound();
     Sleep(120);
     cell_1->state = 0;
     cell_2->state = 0;
@@ -106,7 +107,7 @@ void GameManager::checkForMatching() {
 
 void GameManager::pickCell() {
   Cell *c_under_cursor = getCell(c_idx);
-  selectSound();
+  //selectSound();
   // cell under cursor is already selected
   if (c_under_cursor == selected_pair.first ||
       c_under_cursor == selected_pair.second)

@@ -24,6 +24,7 @@ class GameManager {
   // draw board with console
   void displayBoard();
   void displayScore();
+  void BackGround();
 
   // move cursor 1 step toward dir
   void moveCursor(VECI dir);
