@@ -8,7 +8,7 @@ GameManager::GameManager(GameConfig &config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
   this->cleared = false;
-  this->B.c[0][0].state = 2;
+  this->B.c[0][0].state = 0;
   this->b = toCharBoard(this->B);
   this->pathfinder = new AstarGrid(this->b, config.m, config.n);
   this->timeout_seconds = config.timer;
@@ -96,7 +96,6 @@ Cell *GameManager::getCell(VECI pos) {
     for (int j = 0; j < B.config.n; j++) {
       if (pos.first == i && pos.second == j)
       {
-        B.c[i][j].state = 1;
         return &B.c[i][j];
       } 
     }
@@ -180,12 +179,15 @@ void GameManager::pickCell() {
   if (selected_pair.first != NULL && selected_pair.second != NULL) return;
 
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
-    // first cell selected
+    // first cell selected  
+    c_under_cursor->state = 1;
     selected_pair.first = c_under_cursor;
+        
 
   } else {
     // second cell selected
     selected_pair.second = c_under_cursor;
+    c_under_cursor->state = 1;
     checkForMatching();
   }
 };
@@ -211,7 +213,7 @@ void GameManager::updateSuggestPair() {
   }
 
   suggest_pair.first = getCell(start.pos);
-  suggest_pair.first = getCell(end.pos);
+  suggest_pair.second = getCell(end.pos);
 } 
 
 bool GameManager::checkBoardCleared(){ 

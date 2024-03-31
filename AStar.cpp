@@ -39,9 +39,32 @@ vector<Point> AstarGrid::trace_path(const Point &target) {
   Point curr = target;
   result.push_back(curr);
 
+  int turn_count = 0;
+  // if cost >= 1000 means there a turn made
+  auto pair = cost_tracker.cost_hashmap.find(curr);
+  if (pair != cost_tracker.cost_hashmap.end()) {
+    int cost = pair->second;
+    if (cost >= 1000) {
+      turn_count++;
+    }
+  }
+
   // keep tracing back until hit NULL
   while (curr.parent != NULL) {
     curr = *curr.parent;
+
+    // if cost >= 1000 means there a turn made
+    auto pair = cost_tracker.cost_hashmap.find(curr);
+    if (pair != cost_tracker.cost_hashmap.end()) {
+      int cost = pair->second;
+      if (cost >= 1000) {
+        // std::cout << "Turned at: " << curr.pos.first << "," << curr.pos.second
+        //           << endl;
+        turn_count++;
+        if (turn_count > 2) return vector<Point>{};
+      }
+    }
+
     result.push_back(curr);
   }
 
@@ -53,14 +76,14 @@ bool AstarGrid::is_out_of_bound(Point p) {
       p.pos.second < n)
     return false;
   return true;
-}; 
+};
 
-vector<Point> AstarGrid::find_path(const Point &start, const Point &end) { 
-
-  // check if start and end letters are the same 
-  if(board[start.pos.first][start.pos.second] != board[end.pos.first][end.pos.second]){ 
-    return {};  // NO PATH FOUND 
-  } 
+vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
+  // check if start and end letters are the same
+  if (board[start.pos.first][start.pos.second] !=
+      board[end.pos.first][end.pos.second]) {
+    return {};  // NO PATH FOUND
+  }
 
   // STEP 1: Find the path
   cost_tracker = CostTracker();
@@ -79,12 +102,12 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
         continue;
       }
 
-      // skip obstacles 
+      // skip obstacles
       char n_char = board[neighbor.pos.first][neighbor.pos.second];
       if (n_char == '\0') continue;
 
       // skip lettered cell that is not the target letter
-      if(n_char != ' ' && neighbor != end) continue;
+      if (n_char != ' ' && neighbor != end) continue;
 
       // set parent for path tracing
       Point *parent = new Point(target);
@@ -93,13 +116,13 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
       // evaluate cost
       float cost = cal_cost(neighbor, start, end);
 
-      // only track target that turn once or twice
-      if (cost <= 3000) cost_tracker.insert(neighbor, cost);
+      cost_tracker.insert(neighbor, cost);
     }
 
     // pick next lowest cost target
     target = cost_tracker.pop_point_with_least_cost();
-    // continue until target reach destination
+    // if (target != NULL_POINT ) std::cout << target.pos.first << "," <<
+    // target.pos.second << endl; continue until target reach destination
   }
 
   // STEP 2: Trace back the path
@@ -111,7 +134,7 @@ float AstarGrid::cal_cost(const Point &curr, const Point &start,
   // manhattan distance
   // int g = sqrt(pow(curr.x - start.x,2) + pow(curr.y - start.y,2));
   float h = sqrt(powf(curr.pos.first - end.pos.first, 2) +
-                 powf(curr.pos.first - end.pos.first, 2));
+                 powf(curr.pos.second - end.pos.second, 2));
 
   float f = h;
 
@@ -144,49 +167,45 @@ void AstarGrid::display_board() {
       cout << this->board[i][j] << " ";
     }
     cout << endl;
-  } 
+  }
+};
 
-
-}; 
-
-
-pair<Point,Point> AstarGrid::suggest_path(){  
-  // from board, group Points into letter   
+pair<Point, Point> AstarGrid::suggest_path() {
+  // from board, group Points into letter
   // each letter (A-Z) has a number of points;
-  vector<Point> letter_points[26];    
+  vector<Point> letter_points[26];
 
-  // initialize default array  
-  for(int i = 0; i < 26; i++){ 
-    letter_points[i] = {}; 
-  } 
+  // initialize default array
+  for (int i = 0; i < 26; i++) {
+    letter_points[i] = {};
+  }
 
-  for(int i = 0; i < m; i++){ 
-    for(int j = 0; j < n; j++){ 
-      char c = board[i][j]; 
-      if(c >= 'A' && c <= 'Z'){ 
-        letter_points[c - 'A'].push_back(Point{VECI{i,j}}); 
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      char c = board[i][j];
+      if (c >= 'A' && c <= 'Z') {
+        letter_points[c - 'A'].push_back(Point{VECI{i, j}});
       }
     }
-  } 
+  }
 
-  // for each letter, find_path for every combination of 2 points  
-  // first path found, return it    
-  for(int i = 0; i < 26; i++){   
-    if(letter_points[i].size() < 2) continue;
+  // for each letter, find_path for every combination of 2 points
+  // first path found, return it
+  for (int i = 0; i < 26; i++) {
+    if (letter_points[i].size() < 2) continue;
 
-
-  // brute force all combination of 2 points, and find_path 
-    for(int j = 0; j < letter_points[i].size(); j++){ 
-      for(int k = j+1; k < letter_points[i].size(); k++){ 
-        vector<Point> path = find_path(letter_points[i][j], letter_points[i][k]); 
-        if(path.size() > 0){ 
-          return {letter_points[i][j], letter_points[i][k]}; 
+    // brute force all combination of 2 points, and find_path
+    for (int j = 0; j < letter_points[i].size(); j++) {
+      for (int k = j + 1; k < letter_points[i].size(); k++) {
+        vector<Point> path =
+            find_path(letter_points[i][j], letter_points[i][k]);
+        if (path.size() > 0) {
+          return {letter_points[i][j], letter_points[i][k]};
         }
       }
     }
   }
 
-
   // after all iteration, none found -> return NULL_POINT
   return pair{NULL_POINT, NULL_POINT};
-}; 
+};
