@@ -32,9 +32,9 @@ void drawCell(Cell c) {
       goToXY(x * 7 + 1, y * 3 + i);
       cout << "      ";
       }
-    goToXY(x * 7 + 3, y * 3 + 1);
-    cout << c.c;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+      goToXY(x * 7 + 3, y * 3 + 1);
+      cout << c.c;
+      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
   else if (c.state == -1 || c.c == ' ') { // deleted
     for (int i = 1; i < 3; i++) {
@@ -190,14 +190,14 @@ void showBoard(Board &B) {
 // draw line
 void drawLineX(VECI pos1, VECI pos2) {
   int x1, x2;
-  int y = pos1.second * 3 + 1;
-  if (pos1.first < pos2.first) {
-    x1 = pos1.first * 7 + 3;
-    x2 = pos2.first * 7 + 3;
+  int y = pos1.first * 3 + 1;
+  if (pos1.second < pos2.second) {
+    x1 = pos1.second * 7 + 3;
+    x2 = pos2.second * 7 + 3;
   }
   else {
-    x1 = pos2.first * 7 + 3;
-    x2 = pos1.first * 7 + 3;
+    x1 = pos2.second * 7 + 3;
+    x2 = pos1.second * 7 + 3;
   }
   for (int i = 0; i < x2 - x1; i++) {
     goToXY(x1 + i, y);
@@ -207,14 +207,14 @@ void drawLineX(VECI pos1, VECI pos2) {
 
 void drawLineY(VECI pos1, VECI pos2) {
   int y1, y2;
-  int x = pos1.first * 7 + 3.5;
-  if (pos1.second < pos2.second) {
-    y1 = pos1.second * 3 + 1.5;
-    y2 = pos2.second * 3 + 1.5;
+  int x = pos1.second * 7 + 3.5;
+  if (pos1.first < pos2.first) {
+    y1 = pos1.first * 3 + 1.5;
+    y2 = pos2.first * 3 + 1.5;
   }
   else {
-    y1 = pos2.second * 3 + 1.5;
-    y2 = pos1.second * 3 + 1.5;
+    y1 = pos2.first * 3 + 1.5;
+    y2 = pos1.first * 3 + 1.5;
   }
   for (int i = 0; i < y2 - y1; i++)
   {
@@ -225,21 +225,21 @@ void drawLineY(VECI pos1, VECI pos2) {
 
 void drawLine(VECI pos1, VECI pos2) {
   if (pos1.first == pos2.first)
-    drawLineY(pos1, pos2);
-  else if (pos1.second == pos2.second)
     drawLineX(pos1, pos2);
+  else if (pos1.second == pos2.second)
+    drawLineY(pos1, pos2);
 }
 
 void deleteLineX(VECI pos1, VECI pos2) {
-  int x1, x2;
-  int y = pos1.second * 3 + 1;
-  if (pos1.first < pos2.first) {
-    x1 = pos1.first * 7 + 3;
-    x2 = pos2.first * 7 + 3;
+int x1, x2;
+  int y = pos1.first * 3 + 1;
+  if (pos1.second < pos2.second) {
+    x1 = pos1.second * 7 + 3;
+    x2 = pos2.second * 7 + 3;
   }
   else {
-    x1 = pos2.first * 7 + 3;
-    x2 = pos1.first * 7 + 3;
+    x1 = pos2.second * 7 + 3;
+    x2 = pos1.second * 7 + 3;
   }
   for (int i = 0; i < x2 - x1; i++) {
     goToXY(x1 + i, y);
@@ -249,14 +249,14 @@ void deleteLineX(VECI pos1, VECI pos2) {
 
 void deleteLineY(VECI pos1, VECI pos2) {
   int y1, y2;
-  int x = pos1.first * 7 + 3.5;
-  if (pos1.second < pos2.second) {
-    y1 = pos1.second * 3 + 1.5;
-    y2 = pos2.second * 3 + 1.5;
+  int x = pos1.second * 7 + 3.5;
+  if (pos1.first < pos2.first) {
+    y1 = pos1.first * 3 + 1.5;
+    y2 = pos2.first * 3 + 1.5;
   }
   else {
-    y1 = pos2.second * 3 + 1.5;
-    y2 = pos1.second * 3 + 1.5;
+    y1 = pos2.first * 3 + 1.5;
+    y2 = pos1.first * 3 + 1.5;
   }
   for (int i = 0; i < y2 - y1; i++)
   {
@@ -267,9 +267,9 @@ void deleteLineY(VECI pos1, VECI pos2) {
 
 void deleteLine(VECI pos1, VECI pos2) {
   if (pos1.first == pos2.first)
-    deleteLineY(pos1, pos2);
-  else 
     deleteLineX(pos1, pos2);
+  else 
+    deleteLineY(pos1, pos2);
 }
 
 //---------------------------------
@@ -320,10 +320,8 @@ void drawBackground(Board B)
         {
           goToXY(j * 7, i * 3 + k);
           cout << bg[i - 1][j - 1][k];
-        } 
+        }
       }   
     }
-  }
-  
-    
+  } 
 }
