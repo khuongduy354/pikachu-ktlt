@@ -9,7 +9,12 @@
 #include "utils.h"
 
 // avoid global std namespace due to packages conflict
-using std::pair; using std::priority_queue; using std::unordered_map; using std::vector; using std::cout; using std::endl;
+using std::cout;
+using std::endl;
+using std::pair;
+using std::priority_queue;
+using std::unordered_map;
+using std::vector;
 
 // null point for function returning point, indicating not found, not valid
 #define NULL_POINT  \
@@ -56,15 +61,16 @@ class CostTracker {  // In A* algorithm, we need to pick the point with the
   // lowest cost frequently,
   // so a binary heap is a suitable data structure.
 
+ public:
   // min heap, store cost-point pair, with cost as index.
   priority_queue<pair<float, Point>, vector<pair<float, Point>>, CompareCost>
       cost_heap;
-  // track evaluated points to prevent duplicate.
-  unordered_map<Point, float, Point::Hash> cost_hashmap;
 
- public:
   void insert(Point a, float cost);
   Point pop_point_with_least_cost();
+
+  // track evaluated points to prevent duplicate.
+  unordered_map<Point, float, Point::Hash> cost_hashmap;
 };
 
 // Board representation: 2D array of char
@@ -74,17 +80,21 @@ class CostTracker {  // In A* algorithm, we need to pick the point with the
 
 class AstarGrid {
  public:
+  CostTracker cost_tracker;
   AstarGrid(char **board, int _m, int _n);
 
   // A* search algorithm, return full path of Points
   vector<Point> find_path(const Point &start, const Point &end);
   int m;
   int n;
-  void display_board();
+  void display_board(); 
+
+  // suggest 2 point that can be matched, if none is found -> return pair of NULL_POINT
+  pair<Point,Point> suggest_path(); 
+
 
  private:
   char **board;
-  CostTracker cost_tracker;
   float cal_cost(const Point &curr, const Point &start, const Point &end);
   vector<Point> trace_path(const Point &target);
   bool is_out_of_bound(Point p);

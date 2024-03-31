@@ -9,6 +9,7 @@ int main() {
   //Default config
   GameConfig config = {8, 8, 1, {64}};
   GameManager game = GameManager(config);
+  // game.start_timer(); 
   setCursor(false);
   resizeWindow(400, 400);
   std::string name = "Quynh";

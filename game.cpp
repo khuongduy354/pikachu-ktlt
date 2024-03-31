@@ -1,14 +1,20 @@
 #include "game.h"
 
+#include <algorithm>
 #include <vector>
 using std::vector;
 
 GameManager::GameManager(GameConfig &config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
+  this->cleared = false;
   this->B.c[0][0].state = 2;
   this->b = toCharBoard(this->B);
   this->pathfinder = new AstarGrid(this->b, config.m, config.n);
+  this->timeout_seconds = config.timer;
+  this->time_left = this->timeout_seconds; 
+
+  updateSuggestPair();
 };
 
 void GameManager::displayBoard() { showBoard(B); };
@@ -42,18 +48,69 @@ void GameManager::moveCursor(VECI dir) {
   }
 }
 
+void GameManager::scramble() {
+  // save remaining letters to vec
+  vector<char> letters = {};
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      char curr_let = b[i][j];
+      if ('A' <= curr_let && curr_let <= 'Z') {
+        letters.push_back(curr_let);
+      };
+    }
+  }
+
+  // scramble vec
+  std::random_shuffle(letters.begin(), letters.end());
+
+  // generate positions to place letters
+  vector<VECI> positions = {};
+
+  // exclude borders
+  for (int i = 1; i < B.config.m - 1; i++) {
+    for (int j = 1; j < B.config.n - 1; j++) {
+      positions.push_back(VECI{i, j});
+    };
+  };
+  // scramble position
+  std::random_shuffle(positions.begin(), positions.end());
+
+  // put letters into positions
+  for (int i = 0; i < letters.size(); i++) {
+    VECI pos = positions.at(i);
+    char let = letters.at(i);
+
+    b[pos.first][pos.second] = let;
+  }
+
+  // update struct Board
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      B.c[i][j].c = b[i][j];
+    }
+  }
+}
+
 Cell *GameManager::getCell(VECI pos) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
       if (pos.first == i && pos.second == j)
       {
-        B.c[i][j].state = 1;
         return &B.c[i][j];
       } 
     }
   }
   return NULL;
 };
+
+bool GameManager::suggestPath() { 
+  if(suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
+
+
+  // TODO: draw suggested line
+
+  return true;
+}
 
 void GameManager::checkForMatching() {
   Cell *cell_1 = selected_pair.first;
@@ -86,6 +143,12 @@ void GameManager::checkForMatching() {
     // update char board
     b[cell_1->pos.first][cell_1->pos.second] = ' ';
     b[cell_2->pos.first][cell_2->pos.second] = ' ';
+    
+
+    // check for valid pair, and scramble if board not solveable
+    updateSuggestPair(); 
+
+    checkBoardCleared();
   }
   else 
   {
@@ -116,12 +179,52 @@ void GameManager::pickCell() {
   if (selected_pair.first != NULL && selected_pair.second != NULL) return;
 
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
-    // first cell selected
+    // first cell selected  
+    c_under_cursor->state = 1;
     selected_pair.first = c_under_cursor;
+        
 
   } else {
     // second cell selected
     selected_pair.second = c_under_cursor;
+    c_under_cursor->state = 1;
     checkForMatching();
   }
 };
+
+// void GameManager::start_timer() {
+//   Sleep(1000);
+//   while (time_left) {
+//     time_left--;
+//     Sleep(1000);
+//   }
+// }
+
+void GameManager::updateSuggestPair() {
+  pair<Point, Point> paths = pathfinder->suggest_path();
+  Point start = paths.first;
+  Point end = paths.second;
+
+  while (start == NULL_POINT || end == NULL_POINT) {
+    scramble();
+    paths = pathfinder->suggest_path();
+    start = paths.first;
+    end = paths.second;
+  }
+
+  suggest_pair.first = getCell(start.pos);
+  suggest_pair.second = getCell(end.pos);
+} 
+
+bool GameManager::checkBoardCleared(){ 
+  for(int i = 0; i < B.config.m; i++){
+    for(int j = 0; j < B.config.n; j++){ 
+      if(b[i][j] != ' '){
+        cleared = false; 
+        return false;
+      }
+    }
+  }
+  cleared = true; 
+  return true;
+}
