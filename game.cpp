@@ -4,11 +4,11 @@
 #include <vector>
 using std::vector;
 
-GameManager::GameManager(GameConfig config) {
+GameManager::GameManager(GameConfig &config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
   this->cleared = false;
-  this->B.c[0][0].state = 1;
+  this->B.c[0][0].state = 2;
   this->b = toCharBoard(this->B);
   this->pathfinder = new AstarGrid(this->b, config.m, config.n);
   this->timeout_seconds = config.timer;
@@ -18,6 +18,8 @@ GameManager::GameManager(GameConfig config) {
 };
 
 void GameManager::displayBoard() { showBoard(B); };
+void GameManager::displayScore() { drawScore(1, 50, "Quynh"); };
+void GameManager::BackGround() {drawBackground(B); };
 
 void GameManager::moveCursor(VECI dir) {
   // wrap around grid
@@ -37,7 +39,7 @@ void GameManager::moveCursor(VECI dir) {
   // highlight cell under cursor
   if (prev_cell != NULL) {
     // set active for next cell
-    B.c[c_idx.first][c_idx.second].state = 1;
+    B.c[c_idx.first][c_idx.second].state = 2;
 
     // if prev cell is not picked, deactivate it
     if (prev_cell != selected_pair.first && prev_cell != selected_pair.second) {
@@ -92,7 +94,11 @@ void GameManager::scramble() {
 Cell *GameManager::getCell(VECI pos) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
-      if (pos.first == i && pos.second == j) return &B.c[i][j];
+      if (pos.first == i && pos.second == j)
+      {
+        B.c[i][j].state = 1;
+        return &B.c[i][j];
+      } 
     }
   }
   return NULL;
@@ -118,14 +124,22 @@ void GameManager::checkForMatching() {
   Point start = Point{cell_1->pos};
   Point end = Point{cell_2->pos};
   vector<Point> paths = pathfinder->find_path(start, end);
-
   cell_1->state = 0;
   cell_2->state = 0;
 
   // found
   if (paths.size() > 0) {
+    correctCells(cell_1, cell_2);
+    correctSound();
+    for (int i = 0; i < paths.size() - 1; i++)
+      drawLine(paths[i].pos, paths[i + 1].pos);
+    Sleep(120);
     cell_1->c = ' ';
+    cell_1->state = -1;
     cell_2->c = ' ';
+    cell_2->state = -1;
+    for (int i = 0; i < paths.size() - 1; i++)
+      deleteLine(paths[i].pos, paths[i + 1].pos);
 
     // update char board
     b[cell_1->pos.first][cell_1->pos.second] = ' ';
@@ -137,17 +151,27 @@ void GameManager::checkForMatching() {
 
     checkBoardCleared();
   }
+  else 
+  {
+    wrongCells(cell_1, cell_2);
+    wrongSound();
+    Sleep(120);
+    cell_1->state = 0;
+    cell_2->state = 0;
+  }
+    
 
   selected_pair.first = NULL;
   selected_pair.second = NULL;
 
   // highlight cell under cursor
   Cell *c_under_cursor = getCell(c_idx);
-  if (c_under_cursor != NULL) c_under_cursor->state = 1;
+  if (c_under_cursor != NULL) c_under_cursor->state = 2;
 };
 
 void GameManager::pickCell() {
   Cell *c_under_cursor = getCell(c_idx);
+  selectSound();
   // cell under cursor is already selected
   if (c_under_cursor == selected_pair.first ||
       c_under_cursor == selected_pair.second)
@@ -158,6 +182,7 @@ void GameManager::pickCell() {
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
     // first cell selected
     selected_pair.first = c_under_cursor;
+
   } else {
     // second cell selected
     selected_pair.second = c_under_cursor;

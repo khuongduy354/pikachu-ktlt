@@ -3,6 +3,7 @@
 #include "Astar.h"
 #include "board.h"
 #include "utils.h"
+#include "playSound.h"
 
 class GameManager {
   Board B;   // Board representation (for rendering)
@@ -25,11 +26,13 @@ class GameManager {
   bool cleared = false;
   int timeout_seconds; // seconds to solve this puzzle
   int time_left; // remaining time
-  GameManager(GameConfig config);
+  GameManager(GameConfig &config);
 
   void start_timer();
   // draw board with console
   void displayBoard();
+  void displayScore();
+  void BackGround();
 
   // scramble board;
   void scramble();

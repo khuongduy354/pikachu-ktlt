@@ -12,6 +12,7 @@ int main() {
   GameConfig config = {4, 5, 4, {2, 4, 6, 8}};
   GameManager game = GameManager(config);
   // game.start_timer(); 
+  setCursor(false);
   int FPS = 60;
 
   while (true) {    
