@@ -47,3 +47,4 @@ void drawLine(VECI pos1, VECI pos2);
 void deleteLineX(VECI pos1, VECI pos2);
 void deleteLineY(VECI pos1, VECI pos2);
 void deleteLine(VECI pos1, VECI pos2);
+void drawScore(int stage, int score, std::string name);

@@ -1,47 +1,46 @@
 #include "board.h"
 
 // border of a cell
-char box[5][12] = {{" --------- "},
-                   {"|         |"},
-                   {"|         |"},
-                   {"|         |"},
-                   {" --------- "}};
+char box[4][9] =  {{" ------ "},
+                   {"|      |"},
+                   {"|      |"},
+                   {" ------ "}};
 //Function to draw a cell in the board
 void drawCell(Cell c) {
   using namespace std;
-  int x = c.pos.second + 1, y = c.pos.first + 1;
-  for (int i = 0; i < 5; i++) {
-    goToXY(x * 10, y * 4 + i);
+  float x = c.pos.second, y = c.pos.first;
+  for (int i = 0; i < 4; i++) {
+    goToXY(x * 7, y * 3 + i);
     cout << box[i];
     }
   if (c.state == 1) { //selected 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 100 + (c.c % 6 + 1)); // draw yellow background
-    for (int i = 1; i < 4; i++) {
-      goToXY(x * 10 + 1, y * 4 + i);
-      cout << "         ";
+    for (int i = 1; i < 3; i++) {
+      goToXY(x * 7 + 1, y * 3 + i);
+      cout << "      ";
       }
-    goToXY(x * 10 + 5, y * 4 + 2);
+    goToXY(x * 7 + 3, y * 3 + 1);
     cout << c.c;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
   else if (c.state == 2) { //cursor
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112 + (c.c % 6 + 1)); // draw white background
-    for (int i = 1; i < 4; i++) {
-      goToXY(x * 10 + 1, y * 4 + i);
-      cout << "         ";
+    for (int i = 1; i < 3; i++) {
+      goToXY(x * 7 + 1, y * 3 + i);
+      cout << "      ";
       }
-    goToXY(x * 10 + 5, y * 4 + 2);
+    goToXY(x * 7 + 3, y * 3 + 1);
     cout << c.c;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
   else if (c.state == -1) { // deleted
-    for (int i = 1; i < 4; i++) {
-      goToXY(x * 10 + 1, y * 4 + i);
-      cout << "         ";
+    for (int i = 1; i < 3; i++) {
+      goToXY(x * 7 + 1, y * 3 + i);
+      cout << "      ";
         }
   }
   else { // normal state
-    goToXY(x * 10 + 5, y * 4 + 2);
+    goToXY(x * 7 + 3, y * 3 + 1);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c.c % 6 + 1);
     cout << c.c;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
@@ -51,23 +50,23 @@ void drawCell(Cell c) {
 void wrongCells(Cell *c1, Cell *c2)
 {
   //first cell
-  int x1 = c1->pos.second + 1, y1 = c1->pos.first + 1;
+  int x1 = c1->pos.second, y1 = c1->pos.first;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 70 + (c1->c % 6 + 1)); // draw red background
-  for (int i = 1; i < 4; i++) {
-      goToXY(x1 * 10 + 1, y1 * 4 + i);
-      std::cout << "         ";
+  for (int i = 1; i < 3; i++) {
+      goToXY(x1 * 7 + 1, y1 * 3 + i);
+      std::cout << "      ";
       }
-  goToXY(x1 * 10 + 5, y1 * 4 + 2);
+  goToXY(x1 * 7 + 3, y1 * 3 + 1);
   std::cout << c1->c;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   //second cell
-  int x2 = c2->pos.second + 1, y2 = c2->pos.first + 1;
+  int x2 = c2->pos.second, y2 = c2->pos.first;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 70 + (c2->c % 6 + 1)); // draw red background
-  for (int i = 1; i < 4; i++) {
-      goToXY(x2 * 10 + 1, y2 * 4 + i);
-      std::cout << "         ";
+  for (int i = 1; i < 3; i++) {
+      goToXY(x2 *7 + 1, y2 * 3 + i);
+      std::cout << "      ";
       }
-  goToXY(x2 * 10 + 5, y2 * 4 + 2);
+  goToXY(x2 * 7 + 3, y2 * 3 + 1);
   std::cout << c2->c;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
@@ -75,23 +74,23 @@ void wrongCells(Cell *c1, Cell *c2)
 void correctCells(Cell *c1, Cell *c2)
 {
   //first cell
-  int x1 = c1->pos.second + 1, y1 = c1->pos.first + 1;
+  int x1 = c1->pos.second, y1 = c1->pos.first;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160 + (c1->c % 6 + 1)); // draw green background
-  for (int i = 1; i < 4; i++) {
-      goToXY(x1 * 10 + 1, y1 * 4 + i);
-      std::cout << "         ";
+  for (int i = 1; i < 3; i++) {
+      goToXY(x1 * 7 + 1, y1 * 3 + i);
+      std::cout << "      ";
       }
-  goToXY(x1 * 10 + 5, y1 * 4 + 2);
+  goToXY(x1 * 7 + 3, y1 * 3 + 1);
   std::cout << c1->c;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   //second cell
-  int x2 = c2->pos.second + 1, y2 = c2->pos.first + 1;
+  int x2 = c2->pos.second, y2 = c2->pos.first;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 160 + (c2->c % 6 + 1)); // draw green background
-  for (int i = 1; i < 4; i++) {
-      goToXY(x2 * 10 + 1, y2 * 4 + i);
-      std::cout << "         ";
+  for (int i = 1; i < 3; i++) {
+      goToXY(x2 * 7 + 1, y2 * 3 + i);
+      std::cout << "      ";
       }
-  goToXY(x2 * 10 + 5, y2 * 4 + 2);
+  goToXY(x2 * 7 + 3, y2 * 3 + 1);
   std::cout << c2->c;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
@@ -187,34 +186,36 @@ void showBoard(Board &B) {
 //---------------------------------------------------------------
 // draw line
 void drawLineX(VECI pos1, VECI pos2) {
-  int x1, y1, x2, y2;
-  if (pos1 < pos2) {
-    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
-    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  int x1, x2;
+  int y = pos1.second * 3 + 1;
+  if (pos1.first < pos2.first) {
+    x1 = pos1.first * 7 + 3;
+    x2 = pos2.first * 7 + 3;
   }
   else {
-    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
-    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+    x1 = pos2.first * 7 + 3;
+    x2 = pos1.first * 7 + 3;
   }
   for (int i = 0; i < x2 - x1; i++) {
-    goToXY(x1 + i, y1);
+    goToXY(x1 + i, y);
     std::cout << "-";
   }
 }
 
 void drawLineY(VECI pos1, VECI pos2) {
-  int x1, y1, x2, y2;
-  if (pos1 < pos2) {
-    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
-    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  int y1, y2;
+  int x = pos1.first * 7 + 3.5;
+  if (pos1.second < pos2.second) {
+    y1 = pos1.second * 3 + 1.5;
+    y2 = pos2.second * 3 + 1.5;
   }
   else {
-    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
-    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+    y1 = pos2.second * 3 + 1.5;
+    y2 = pos1.second * 3 + 1.5;
   }
   for (int i = 0; i < y2 - y1; i++)
   {
-    goToXY(x2, y1 + i);
+    goToXY(x, y1 + i);
     std::cout << "|";
   }
 }
@@ -222,39 +223,41 @@ void drawLineY(VECI pos1, VECI pos2) {
 void drawLine(VECI pos1, VECI pos2) {
   if (pos1.first == pos2.first)
     drawLineY(pos1, pos2);
-  else 
+  else if (pos1.second == pos2.second)
     drawLineX(pos1, pos2);
 }
 
 void deleteLineX(VECI pos1, VECI pos2) {
-  int x1, y1, x2, y2;
-  if (pos1 < pos2) {
-    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
-    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  int x1, x2;
+  int y = pos1.second * 3 + 1;
+  if (pos1.first < pos2.first) {
+    x1 = pos1.first * 7 + 3;
+    x2 = pos2.first * 7 + 3;
   }
   else {
-    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
-    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+    x1 = pos2.first * 7 + 3;
+    x2 = pos1.first * 7 + 3;
   }
   for (int i = 0; i < x2 - x1; i++) {
-    goToXY(x1 + i, y1);
+    goToXY(x1 + i, y);
     std::cout << " ";
   }
 }
 
 void deleteLineY(VECI pos1, VECI pos2) {
-  int x1, y1, x2, y2;
-  if (pos1 < pos2) {
-    x1 = pos1.first * 10 + 5, y1 = pos1.second * 4 + 2;
-    x2 = pos2.first * 10 + 5, y2 = pos2.second * 4 + 2;
+  int y1, y2;
+  int x = pos1.first * 7 + 3.5;
+  if (pos1.second < pos2.second) {
+    y1 = pos1.second * 3 + 1.5;
+    y2 = pos2.second * 3 + 1.5;
   }
   else {
-    x1 = pos2.first * 10 + 5, y1 = pos2.second * 4 + 2;
-    x2 = pos1.first * 10 + 5, y2 = pos1.second * 4 + 2;
+    y1 = pos2.second * 3 + 1.5;
+    y2 = pos1.second * 3 + 1.5;
   }
   for (int i = 0; i < y2 - y1; i++)
   {
-    goToXY(x2, y1 + i);
+    goToXY(x, y1 + i);
     std::cout << " ";
   }
 }
@@ -264,4 +267,30 @@ void deleteLine(VECI pos1, VECI pos2) {
     deleteLineY(pos1, pos2);
   else 
     deleteLineX(pos1, pos2);
+}
+
+//---------------------------------
+
+void drawScore(int stage, int score, std::string name) {
+  using namespace std;
+  int x = 13, y = 1;
+  char scoreBox[9][30] = {{" --------------------------- "},
+                           {"|         STAGE             |"},
+                           {"|---------------------------|"},
+                           {"|  -----------------------  |"},
+                           {"| |  PLAYER  |            | |"},
+                           {"| |          |            | |"},
+                           {"| |  SCORE   |            | |"},
+                           {"|  -----------------------  |"},
+                           {" --------------------------- "}};
+  for (int i = 0; i < 9; i++) {
+    goToXY(x*7, y*3 + i);
+    cout << scoreBox[i];
+  } 
+  goToXY(15 * 7 + 2, 3 + 6);
+  cout << score;
+  goToXY(15 * 7 + 2, 3 + 4);
+  cout << name;
+  goToXY(15 * 7 + 3, 3 + 1);
+  cout << stage;
 }

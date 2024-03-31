@@ -3,6 +3,7 @@
 #include "Astar.h"
 #include "board.h"
 #include "utils.h"
+#include "playSound.h"
 
 class GameManager {
   Board B;  // Board representation (for rendering)
@@ -22,6 +23,7 @@ class GameManager {
 
   // draw board with console
   void displayBoard();
+  void displayScore();
 
   // move cursor 1 step toward dir
   void moveCursor(VECI dir);
