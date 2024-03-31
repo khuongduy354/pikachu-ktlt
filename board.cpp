@@ -16,12 +16,13 @@ void drawCell(Cell c, int color) {
   int x = c.pos.second + 1, y = c.pos.first + 1;
   if (c.c != '\0') {
     for (int i = 0; i < 5; i++) {
-    goToXY(x * 10, y * 4 + i);
-    cout << box[i];
+      goToXY(x * 10, y * 4 + i);
+      cout << box[i];
     }
     // 1 means selected cell
     if (c.state == 1) {
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color + (c.c % 6 + 1));
+      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                              color + (c.c % 6 + 1));
       // draw white background
       for (int i = 1; i < 4; i++) {
         goToXY(x * 10 + 1, y * 4 + i);
@@ -38,7 +39,7 @@ void drawCell(Cell c, int color) {
       cout << c.c;
       SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
-    }
+  }
 }
 
 void deleteCell(Cell c) {
@@ -70,10 +71,8 @@ char **toCharBoard(Board B) {
   return board;
 }
 // function to generate board
-Board generateBoard(GameConfig config)
-{
-  if (config.m * config.n % 2 == 0)
-  {
+Board generateBoard(GameConfig config) {
+  if (config.m * config.n % 2 == 0) {
     // Generate random chars
     char *ran_chars;
     ran_chars = new char[config.distinct_chars];
@@ -93,20 +92,15 @@ Board generateBoard(GameConfig config)
     for (int i = 0; i < config.distinct_chars; i++)
       B.config.char_occurences[i] = config.char_occurences[i];
     B.c = new Cell *[config.m + 2];
-    for (int i = 0; i < config.m + 2; i++)
-    {
+    for (int i = 0; i < config.m + 2; i++) {
       B.c[i] = new Cell[config.n + 2];
-      for (int j = 0; j < config.n + 2; j++)
-      {
-        if (i == 0 || i == config.m + 1 || j == 0 || j == config.n + 1)
-        {
+      for (int j = 0; j < config.n + 2; j++) {
+        if (i == 0 || i == config.m + 1 || j == 0 || j == config.n + 1) {
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
           B.c[i][j].c = '\0';
           B.c[i][j].state = 0;
-        }
-        else 
-        {
+        } else {
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
           B.c[i][j].c = chars[getRandomInt(0, config.m * config.n - 1)];
@@ -117,9 +111,7 @@ Board generateBoard(GameConfig config)
     delete[] ran_chars;
     delete[] chars;
     return B;
-  }
-  else
-  {
+  } else {
     Board b;
     return b;
   }

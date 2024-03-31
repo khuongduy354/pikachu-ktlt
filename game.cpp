@@ -7,9 +7,14 @@ using std::vector;
 GameManager::GameManager(GameConfig config) {
   this->B = generateBoard(config);
   c_idx = VECI{0, 0};
+  this->cleared = false;
   this->B.c[0][0].state = 1;
   this->b = toCharBoard(this->B);
   this->pathfinder = new AstarGrid(this->b, config.m, config.n);
+  this->timeout_seconds = config.timer;
+  this->time_left = this->timeout_seconds; 
+
+  updateSuggestPair();
 };
 
 void GameManager::displayBoard() { showBoard(B); };
@@ -93,14 +98,13 @@ Cell *GameManager::getCell(VECI pos) {
   return NULL;
 };
 
-bool GameManager::suggestPath() {
-  pair<Point, Point> paths = pathfinder->suggest_path();
-  Point start = paths.first;
-  Point end = paths.second;
+bool GameManager::suggestPath() { 
+  if(suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
 
-  if (start == NULL_POINT || end == NULL_POINT) return false;
 
   // TODO: draw suggested line
+
+  return true;
 }
 
 void GameManager::checkForMatching() {
@@ -126,6 +130,12 @@ void GameManager::checkForMatching() {
     // update char board
     b[cell_1->pos.first][cell_1->pos.second] = ' ';
     b[cell_2->pos.first][cell_2->pos.second] = ' ';
+    
+
+    // check for valid pair, and scramble if board not solveable
+    updateSuggestPair(); 
+
+    checkBoardCleared();
   }
 
   selected_pair.first = NULL;
@@ -154,3 +164,40 @@ void GameManager::pickCell() {
     checkForMatching();
   }
 };
+
+void GameManager::start_timer() {
+  Sleep(1000);
+  while (time_left) {
+    time_left--;
+    Sleep(1000);
+  }
+}
+
+void GameManager::updateSuggestPair() {
+  pair<Point, Point> paths = pathfinder->suggest_path();
+  Point start = paths.first;
+  Point end = paths.second;
+
+  while (start == NULL_POINT || end == NULL_POINT) {
+    scramble();
+    paths = pathfinder->suggest_path();
+    start = paths.first;
+    end = paths.second;
+  }
+
+  suggest_pair.first = getCell(start.pos);
+  suggest_pair.first = getCell(end.pos);
+} 
+
+bool GameManager::checkBoardCleared(){ 
+  for(int i = 0; i < B.config.m; i++){
+    for(int j = 0; j < B.config.n; j++){ 
+      if(b[i][j] != ' '){
+        cleared = false; 
+        return false;
+      }
+    }
+  }
+  cleared = true; 
+  return true;
+}

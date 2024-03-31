@@ -11,15 +11,23 @@ class GameManager {
   // selected pair
   std::pair<Cell *, Cell *> selected_pair{NULL, NULL};
 
+  // suggest pair
+  std::pair<Cell *, Cell *> suggest_pair{NULL, NULL};
+
   // cursor index
   VECI c_idx;
 
   // pathfinder
-  AstarGrid *pathfinder = NULL;
+  AstarGrid *pathfinder = NULL; 
 
- public:
+
+ public: 
+  bool cleared = false;
+  int timeout_seconds; // seconds to solve this puzzle
+  int time_left; // remaining time
   GameManager(GameConfig config);
 
+  void start_timer();
   // draw board with console
   void displayBoard();
 
@@ -39,5 +47,10 @@ class GameManager {
   void checkForMatching();
 
   // select a cell
-  void pickCell();
+  void pickCell(); 
+
+  bool checkBoardCleared();
+
+  // pick two valid pair, if not scramble 
+  void updateSuggestPair();
 };
