@@ -1,0 +1,3 @@
+Duy 2 100
+Quynh 1 50
+hehehe 3 150

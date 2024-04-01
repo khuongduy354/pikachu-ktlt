@@ -207,5 +207,5 @@ pair<Point, Point> AstarGrid::suggest_path() {
   }
 
   // after all iteration, none found -> return NULL_POINT
-  return pair{NULL_POINT, NULL_POINT};
+  return pair<Point,Point>{NULL_POINT, NULL_POINT};
 };
