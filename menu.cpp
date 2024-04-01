@@ -75,7 +75,7 @@ void getPlayerInfor() {
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
   for (int i = 0; i < 9; i++) {
     goToXY(3 * 7 + 7, 11 + i);
-      cout << "                                                                 ";
+      cout << "                                                                  ";
     }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   for (int i = 0; i < 7; i++) {
@@ -124,7 +124,7 @@ void getPlayerInfor() {
 
 void LeaderBoard() {
   using namespace std;
-
+  setCursor(false);
   char title[][99] = {{" ,--.   ,------.  ,---.  ,------.  ,------.,------. ,-----.   ,-----.   ,---.  ,------. ,------.  "},
                       {"|   |   |  .---' /  O  \\ |  .-.  \\ |  .---'|  .--. '|  |) /_ '  .-.  ' /  O  \\ |  .--. '|  .-.  \\ "},
                       {"|   |   |  `--, |  .-.  ||  |  \\  :|  `--, |  '--'.'|  .-.  \\|  | |  ||  .-.  ||  '--'.'|  |  \\  :"},
@@ -172,5 +172,53 @@ void LeaderBoard() {
     cout << score;
     n++;
   } 
+  goToXY(3 * 7 + 5 + 4, 15 + n * 3);
+  cout << "(Press Space to return to Menu)";
+
   fin.close();
 }
+
+void endGame(int score)
+{
+  setCursor(false);
+  char end[][63] = {{"  _____          __  __ ______    ______      ________ _____  "},
+                    {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
+                    {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
+                    {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
+                    {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
+                    {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\"}};
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
+  for (int i = 0; i < 6; i++) {
+    goToXY(4 * 7 + 2, 1 + i);
+    cout << end[i];
+  }
+  char table[][63] =        {{" ------------------------------------------------------------ "},
+                             {"|                                                            |"},
+                             {"|                                                            |"},
+                             {"|                                                            |"},
+                             {"|                                                            |"},
+                             {" ------------------------------------------------------------ "}};
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
+  for (int i = 0; i < 8; i++) {
+    goToXY(3 * 7 + 7, 13 + i);
+      cout << "                                                                 ";
+    }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+  for (int i = 0; i < 6; i++) {
+    goToXY(3 * 7 + 9, 14 + i);
+      cout << table[i];
+    }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
+  for (int i = 0; i < 4; i++) {
+    goToXY(3 * 7 + 10, 15 + i);
+      cout << "                                                            ";
+    }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 115);
+  goToXY(6 * 7 + 8, 16);
+  cout << "YOUR SCORE: ";
+  goToXY(7 * 7 + 18, 16);
+  cout << score;
+  goToXY(6 * 7 + 3, 18);
+  cout << "(Press Space to return to Menu)";
+}
+
