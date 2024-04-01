@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include "board.h"
-
+#include "playSound.h"
 using namespace std;
 class Menu {
   int selected = 1;
@@ -181,6 +181,7 @@ void LeaderBoard() {
 void endGame(int score)
 {
   setCursor(false);
+  endSound();
   char end[][63] = {{"  _____          __  __ ______    ______      ________ _____  "},
                     {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
                     {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
