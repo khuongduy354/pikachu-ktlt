@@ -20,13 +20,14 @@ class GameManager {
   VECI c_idx;
 
   // pathfinder
-  AstarGrid *pathfinder = NULL; 
+  AstarGrid pathfinder{NULL, 0,0}; 
 
 
  public: 
   bool cleared = false;
   int buffer_score = 0;
   GameManager(GameConfig &config);
+  ~GameManager();
 
   // draw board with console
   void displayBoard();

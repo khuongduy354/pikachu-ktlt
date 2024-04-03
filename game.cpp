@@ -6,15 +6,20 @@ using std::string;
 using std::vector;
 
 GameManager::GameManager(GameConfig &config) {
-  this->B = generateBoard(config);
+  B = generateBoard(config);
   c_idx = VECI{0, 0};
-  this->cleared = false;
-  this->B.c[0][0].state = 2;
-  this->b = toCharBoard(this->B);
-  this->pathfinder = new AstarGrid(this->b, config.m, config.n);
+  cleared = false;
+  B.c[0][0].state = 2;
+  b = toCharBoard(B);
+  pathfinder = AstarGrid(b, config.m, config.n);
 
   updateSuggestPair();
 };
+GameManager::~GameManager() {
+  for (int i = 0; i < B.config.m; i++) {
+    delete[] b[i];
+  }
+}
 
 void GameManager::displayBoard() { showBoard(B); };
 void GameManager::displayScore(int stage, int score, string uname) {
@@ -121,7 +126,7 @@ void GameManager::checkForMatching() {
   //  setup astar
   Point start = Point{cell_1->pos};
   Point end = Point{cell_2->pos};
-  vector<Point> paths = pathfinder->find_path(start, end);
+  vector<Point> paths = pathfinder.find_path(start, end);
   cell_1->state = 0;
   cell_2->state = 0;
 
@@ -176,6 +181,9 @@ void GameManager::pickCell() {
   // both cell selected
   if (selected_pair.first != NULL && selected_pair.second != NULL) return;
 
+  // dont select cell if not a letter
+  if (c_under_cursor->c == ' ') return;
+
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
     // first cell selected
     c_under_cursor->state = 1;
@@ -190,13 +198,13 @@ void GameManager::pickCell() {
 };
 
 void GameManager::updateSuggestPair() {
-  pair<Point, Point> paths = pathfinder->suggest_path();
+  pair<Point, Point> paths = pathfinder.suggest_path();
   Point start = paths.first;
   Point end = paths.second;
 
   while (start == NULL_POINT || end == NULL_POINT) {
     scramble();
-    paths = pathfinder->suggest_path();
+    paths = pathfinder.suggest_path();
     start = paths.first;
     end = paths.second;
   }

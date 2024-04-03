@@ -45,8 +45,8 @@ int main() {
 
     // HANDLE staged cleared
     if (game.cleared) { 
-      std::cout << "You cleared this stage";
       system("cls");   
+      std::cout << "You cleared this stage";
       GameConfig new_config = configs[0];
       if(stage > 3 ){  
         new_config = configs[1];
