@@ -151,15 +151,33 @@ void LeaderBoard() {
                              {"|                          |                 |              |"},
                              {" -------------------------- ----------------- -------------- "}};
   ifstream fin ("leaderboard.txt");
-  int n = 0;
-  string name = " ";
-  int stage;
-  int score;
+  string name[50] = {" "};
+  int stage[50];
+  int score[50];
+  int k = 0;
   while (!fin.eof()) {
-    getline(fin, name, ' ');
-    fin >> stage;
-    fin >> score;
+    getline(fin, name[k], ' ');
+    fin >> stage[k];
+    fin >> score[k];
     fin.get();
+    k++;
+  }
+  int max_pos;
+  for (int i = 0; i < k; i++)
+  {
+    max_pos = i;
+    for (int j = i + 1; j < k; j++) {
+      if (score[j] > score[max_pos])
+        max_pos = j;
+      }
+      if (max_pos != i) {
+        swap(score[max_pos], score[i]);
+        swap(stage[max_pos], stage[i]);
+        swap(name[max_pos], name[i]);
+      }
+    }
+  int n = 0;
+  while (n < 5) {
     for (int i = 0; i < 3; i++) {
       goToXY(3 * 7 + 5 + 4, 11 + n * 3 + i);
       cout << learderBoard[i];

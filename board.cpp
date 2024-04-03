@@ -176,7 +176,7 @@ Board generateBoard(GameConfig &config)
 void showBoard(Board &B) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
-      drawCell(B.c[i][j]);
+        drawCell(B.c[i][j]);
     }
   }
 }
@@ -274,24 +274,44 @@ void drawScore(int stage, int score, std::string name) {
   using namespace std;
   int x = 13, y = 1;
   char scoreBox[9][30] = {{" --------------------------- "},
-                           {"|         STAGE             |"},
+                           {"|                           |"},
                            {"|---------------------------|"},
-                           {"|  -----------------------  |"},
-                           {"| |  PLAYER  |            | |"},
-                           {"| |          |            | |"},
-                           {"| |  SCORE   |            | |"},
-                           {"|  -----------------------  |"},
-                           {" --------------------------- "}};
+                           {"                             "},
+                           {"   -----------------------   "},
+                           {"  |          |            |  "},
+                           {"  |          |            |  "},
+                           {"  |          |            |  "},
+                           {"   -----------------------   "},
+                           };
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 96 + 7);
+  // for (int i = 1; i < 8; i++) {
+  //   goToXY(x*7 + 1, y*3 + i);
+  //   cout << "                           ";
+  // } 
   for (int i = 0; i < 9; i++) {
     goToXY(x*7, y*3 + i);
     cout << scoreBox[i];
-  } 
+  }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112);
+  for (int i = 0; i < 3; i++)
+  {
+    goToXY(x *7, y * 3 + i);
+    cout << "                              ";
+  }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112 + 6);
+  goToXY(14 * 7, 3 + 1);
+  cout << "STAGE";
+  goToXY(15 * 7 + 3, 3 + 1);
+  cout << stage;
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 96 + 7);
+  goToXY(13 * 7 + 4, 3 + 4);
+  cout << "PLAYER";
+  goToXY(13 * 7 + 4, 3 + 6);
+  cout << "SCORE";
   goToXY(15 * 7 + 2, 3 + 6);
   cout << score;
   goToXY(15 * 7 + 2, 3 + 4);
   cout << name;
-  goToXY(15 * 7 + 3, 3 + 1);
-  cout << stage;
 }
 
 void drawBackground(Board B)
