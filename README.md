@@ -28,3 +28,10 @@
 Me: Pathfinding, Help Feature, glueing game flows: checkwin, new stages, board logics,...
 
 Quynh: Keyboard input, visual, save game, 2D array generation
+
+ 
+
+# Todo:  
+- make sure game continue, with increase difficulties (sizes) as config  
+- cout: press f to suggest, and color when suggest. 
+- menu print pretty: title + name input
