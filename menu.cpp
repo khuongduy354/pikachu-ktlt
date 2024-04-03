@@ -3,13 +3,8 @@
 #include <fstream>
 #include "board.h"
 #include "playSound.h"
-using namespace std;
-class Menu {
-  int selected = 1;
-  std::string menu_template;
-  std::string uname;
 #include "menu.h"
-
+using namespace std;
 void Menu::moveSelected() {
   // 3 options: start, leaderboard, quit
   selected = (selected + 1) % 3;
@@ -177,15 +172,6 @@ void Menu::LeaderBoard() {
   int stage[50];
   int score[50];
   int k = 0;
-  char learderBoard[][62] = {
-      {" -------------------------- ----------------- -------------- "},
-      {"|                          |                 |              |"},
-      {" -------------------------- ----------------- -------------- "}};
-  ifstream fin("leaderboard.txt");
-  int n = 0;
-  string name = " ";
-  int stage;
-  int score;
   while (!fin.eof()) {
     getline(fin, name[k], ' ');
     fin >> stage[k];
@@ -214,11 +200,11 @@ void Menu::LeaderBoard() {
       cout << learderBoard[i];
     }
     goToXY(5 * 7 + 7, 12 + n * 3);
-    cout << name;
+    cout << name[n];
     goToXY(9 * 7 + 3, 12 + n * 3);
-    cout << stage;
+    cout << stage[n];
     goToXY(11 * 7 + 5, 12 + n * 3);
-    cout << score;
+    cout << score[n];
     n++;
   }
   goToXY(3 * 7 + 5 + 4, 15 + n * 3);
@@ -236,14 +222,6 @@ void Menu::endGame(int score) {
                     {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
                     {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
                     {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\"}};
-  char end[][63] = {
-      {"  _____          __  __ ______    ______      ________ _____  "},
-      {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
-      {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
-      {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
-      {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
-      {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  "
-       "\\_\\"}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
   for (int i = 0; i < 6; i++) {
     goToXY(4 * 7 + 2, 1 + i);

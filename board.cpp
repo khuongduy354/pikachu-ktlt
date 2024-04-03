@@ -13,9 +13,9 @@ void drawCell(Cell c) {
   {
     for (int i = 0; i < 4; i++) {
     goToXY(x * 7, y * 3 + i);
-    cout << box[i];
+    cout << box[i]; 
     }
-  }
+   }
   if (c.state == 1) { //selected 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 100 + (c.c % 6 + 1)); // draw yellow background
     for (int i = 1; i < 3; i++) {
@@ -24,7 +24,6 @@ void drawCell(Cell c) {
       }
     goToXY(x * 7 + 3, y * 3 + 1);
     cout << c.c;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
   else if (c.state == 2) { //cursor
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112 + (c.c % 6 + 1)); // draw white background
@@ -34,9 +33,8 @@ void drawCell(Cell c) {
       }
       goToXY(x * 7 + 3, y * 3 + 1);
       cout << c.c;
-      SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }
-  else if (c.state == -1 || c.c == ' ') { // deleted
+  else if (c.c == ' ') { // deleted
     for (int i = 1; i < 3; i++) {
       goToXY(x * 7 + 1, y * 3 + i);
       cout << "      ";
@@ -46,8 +44,8 @@ void drawCell(Cell c) {
     goToXY(x * 7 + 3, y * 3 + 1);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c.c % 6 + 1);
     cout << c.c;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
     }  
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
 
 void wrongCells(Cell *c1, Cell *c2)
@@ -149,7 +147,7 @@ Board generateBoard(GameConfig &config)
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
           B.c[i][j].c = ' ';
-          B.c[i][j].state = -1;
+          B.c[i][j].state = 0;
         }
         else 
         {
@@ -296,7 +294,7 @@ void drawScore(int stage, int score, std::string name) {
   for (int i = 0; i < 3; i++)
   {
     goToXY(x *7, y * 3 + i);
-    cout << "                              ";
+    cout << "                             ";
   }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 112 + 6);
   goToXY(14 * 7, 3 + 1);
@@ -304,13 +302,13 @@ void drawScore(int stage, int score, std::string name) {
   goToXY(15 * 7 + 3, 3 + 1);
   cout << stage;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 96 + 7);
-  goToXY(13 * 7 + 4, 3 + 4);
+  goToXY(13 * 7 + 4, 4 + 4);
   cout << "PLAYER";
-  goToXY(13 * 7 + 4, 3 + 6);
+  goToXY(13 * 7 + 4, 4 + 6);
   cout << "SCORE";
-  goToXY(15 * 7 + 2, 3 + 6);
+  goToXY(15 * 7 + 2, 4 + 6);
   cout << score;
-  goToXY(15 * 7 + 2, 3 + 4);
+  goToXY(15 * 7 + 2, 4 + 4);
   cout << name;
 }
 
