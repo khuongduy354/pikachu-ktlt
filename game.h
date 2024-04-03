@@ -34,6 +34,7 @@ class GameManager {
   void displayScore(int stage, int score, std::string uname);
   void BackGround();
 
+
   // scramble board;
   void scramble();
 

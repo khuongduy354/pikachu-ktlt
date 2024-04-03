@@ -111,8 +111,10 @@ Cell *GameManager::getCell(VECI pos) {
 bool GameManager::suggestPath() {
   if (suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
 
-  // TODO: draw suggested line
-
+  // TODO: draw suggested line  
+  Cell *c1 = suggest_pair.first;
+  Cell *c2 = suggest_pair.second; 
+ 
   return true;
 }
 
@@ -169,7 +171,7 @@ void GameManager::checkForMatching() {
   // highlight cell under cursor
   Cell *c_under_cursor = getCell(c_idx);
   if (c_under_cursor != NULL) c_under_cursor->state = 2;
-};
+}; 
 
 void GameManager::pickCell() {
   Cell *c_under_cursor = getCell(c_idx);

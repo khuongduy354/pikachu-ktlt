@@ -60,16 +60,22 @@ int main() {
 
     game.displayBoard();
     game.BackGround();
-    game.displayScore(stage, score, menu.uname);
+    game.displayScore(stage, score, menu.uname); 
 
-    VECI dir = getConsoleInput();
+
+    int key = _getch();
+
+    VECI dir = parseInput(key);
 
     if (dir.first == -2 && dir.second == -2) {
       game.pickCell();
       score += game.buffer_score;
       game.buffer_score = 0;
-    } else if (dir.first == 0 && dir.second == 0) {
-      continue;
+    } else if (dir.first == 0 && dir.second == 0) {   
+      // if pressed f , suggest path
+      if(key == 'F' || key == 'f'){  
+        game.suggestPath();
+      }
     } else {
       game.moveCursor(dir);
     }
