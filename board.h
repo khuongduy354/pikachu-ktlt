@@ -14,7 +14,6 @@ struct GameConfig {
   int char_occurences[26];  // number of occurences of each char, under the
   // condition that sum of array is equal to length *
   // width
-  int timer = 100;
 };
 
 struct Cell {

@@ -4,6 +4,7 @@
 #include "board.h"
 #include "utils.h"
 #include "playSound.h"
+#include <string>
 
 class GameManager {
   Board B;   // Board representation (for rendering)
@@ -19,19 +20,18 @@ class GameManager {
   VECI c_idx;
 
   // pathfinder
-  AstarGrid *pathfinder = NULL; 
+  AstarGrid pathfinder{NULL, 0,0}; 
 
 
  public: 
   bool cleared = false;
-  int timeout_seconds; // seconds to solve this puzzle
-  int time_left; // remaining time
+  int buffer_score = 0;
   GameManager(GameConfig &config);
+  ~GameManager();
 
-  void start_timer();
   // draw board with console
   void displayBoard();
-  void displayScore();
+  void displayScore(int stage, int score, std::string uname);
   void BackGround();
 
   // scramble board;

@@ -2,24 +2,30 @@
 
 #include <algorithm>
 #include <vector>
+using std::string;
 using std::vector;
 
 GameManager::GameManager(GameConfig &config) {
-  this->B = generateBoard(config);
+  B = generateBoard(config);
   c_idx = VECI{0, 0};
-  this->cleared = false;
-  this->B.c[0][0].state = 2;
-  this->b = toCharBoard(this->B);
-  this->pathfinder = new AstarGrid(this->b, config.m, config.n);
-  this->timeout_seconds = config.timer;
-  this->time_left = this->timeout_seconds; 
+  cleared = false;
+  B.c[0][0].state = 2;
+  b = toCharBoard(B);
+  pathfinder = AstarGrid(b, config.m, config.n);
 
   updateSuggestPair();
 };
+GameManager::~GameManager() {
+  for (int i = 0; i < B.config.m; i++) {
+    delete[] b[i];
+  }
+}
 
 void GameManager::displayBoard() { showBoard(B); };
-void GameManager::displayScore() { drawScore(1, 50, "Quynh"); };
-void GameManager::BackGround() {drawBackground(B); };
+void GameManager::displayScore(int stage, int score, string uname) {
+  drawScore(stage, score, uname);
+};
+void GameManager::BackGround() { drawBackground(B); };
 
 void GameManager::moveCursor(VECI dir) {
   // wrap around grid
@@ -94,18 +100,16 @@ void GameManager::scramble() {
 Cell *GameManager::getCell(VECI pos) {
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
-      if (pos.first == i && pos.second == j)
-      {
+      if (pos.first == i && pos.second == j) {
         return &B.c[i][j];
-      } 
+      }
     }
   }
   return NULL;
 };
 
-bool GameManager::suggestPath() { 
-  if(suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
-
+bool GameManager::suggestPath() {
+  if (suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
 
   // TODO: draw suggested line
 
@@ -122,7 +126,7 @@ void GameManager::checkForMatching() {
   //  setup astar
   Point start = Point{cell_1->pos};
   Point end = Point{cell_2->pos};
-  vector<Point> paths = pathfinder->find_path(start, end);
+  vector<Point> paths = pathfinder.find_path(start, end);
   cell_1->state = 0;
   cell_2->state = 0;
 
@@ -143,22 +147,21 @@ void GameManager::checkForMatching() {
     // update char board
     b[cell_1->pos.first][cell_1->pos.second] = ' ';
     b[cell_2->pos.first][cell_2->pos.second] = ' ';
-    
+
+    // add 10 points
+    buffer_score += 10;
 
     // check for valid pair, and scramble if board not solveable
-    updateSuggestPair(); 
+    updateSuggestPair();
 
     checkBoardCleared();
-  }
-  else 
-  {
+  } else {
     wrongCells(cell_1, cell_2);
     wrongSound();
     Sleep(120);
     cell_1->state = 0;
     cell_2->state = 0;
   }
-    
 
   selected_pair.first = NULL;
   selected_pair.second = NULL;
@@ -178,11 +181,13 @@ void GameManager::pickCell() {
   // both cell selected
   if (selected_pair.first != NULL && selected_pair.second != NULL) return;
 
+  // dont select cell if not a letter
+  if (c_under_cursor->c == ' ') return;
+
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
-    // first cell selected  
+    // first cell selected
     c_under_cursor->state = 1;
     selected_pair.first = c_under_cursor;
-        
 
   } else {
     // second cell selected
@@ -192,39 +197,31 @@ void GameManager::pickCell() {
   }
 };
 
-// void GameManager::start_timer() {
-//   Sleep(1000);
-//   while (time_left) {
-//     time_left--;
-//     Sleep(1000);
-//   }
-// }
-
 void GameManager::updateSuggestPair() {
-  pair<Point, Point> paths = pathfinder->suggest_path();
+  pair<Point, Point> paths = pathfinder.suggest_path();
   Point start = paths.first;
   Point end = paths.second;
 
   while (start == NULL_POINT || end == NULL_POINT) {
     scramble();
-    paths = pathfinder->suggest_path();
+    paths = pathfinder.suggest_path();
     start = paths.first;
     end = paths.second;
   }
 
   suggest_pair.first = getCell(start.pos);
   suggest_pair.second = getCell(end.pos);
-} 
+}
 
-bool GameManager::checkBoardCleared(){ 
-  for(int i = 0; i < B.config.m; i++){
-    for(int j = 0; j < B.config.n; j++){ 
-      if(b[i][j] != ' '){
-        cleared = false; 
+bool GameManager::checkBoardCleared() {
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      if (b[i][j] != ' ') {
+        cleared = false;
         return false;
       }
     }
   }
-  cleared = true; 
+  cleared = true;
   return true;
 }
