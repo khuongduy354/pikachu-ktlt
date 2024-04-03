@@ -1,37 +1,40 @@
+#include "menu.h"
+
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
+
 #include "board.h"
 #include "playSound.h"
-#include "menu.h"
-using namespace std;
 void Menu::moveSelected() {
   // 3 options: start, leaderboard, quit
   selected = (selected + 1) % 3;
 }
 
-void Menu::showScreen(){
-  if(show_leaderboard) { 
-    LeaderBoard(); 
-  }else{ 
+void Menu::showScreen() {
+  if (show_leaderboard) {
+    LeaderBoard();
+  } else if(uname == "") {
     showMenu();
   }
 }
 
-void Menu::press() { 
-  if(show_leaderboard){
+void Menu::press() {
+  if (show_leaderboard) {
     system("cls");
     show_leaderboard = false;
     return;
   }
   if (selected == 0 && uname == "") {
-    std::cout << "Input your name: ";
-    std::cin >> uname;
+    getPlayerInfor();
+    // std::cout << "Input your name: ";
+    // std::cin >> uname;
+    goToXY(7 * 7 , 20);
     std::cout << "Press enter to start game!";
-  } else if (uname != "") {
-    enter_game = true;
+  } else if (uname != "") { 
     system("cls");
-  } else if (selected == 1) { 
+    enter_game = true;
+  } else if (selected == 1) {
     system("cls");
     show_leaderboard = true;
   } else if (selected == 2) {
@@ -40,15 +43,22 @@ void Menu::press() {
 }
 void Menu::showMenu() {
   goToXY(0, 0);
+  gameTitle();
+  std::cout << endl; 
 
+  goToXY(7 * 6, 14);
+  std::cout << "Press arrow key to move down & Enter to select." << endl;
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                           selected == 0 ? 14 : 15);
+  goToXY(7 * 7 + 8, 16);
   std::cout << "Start" << endl;
 
+  goToXY(7 * 7 + 8, 17);
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                           selected == 1 ? 14 : 15);
   std::cout << "Leaderboard" << endl;
 
+  goToXY(7 * 7 + 8, 18);
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
                           selected == 2 ? 14 : 15);
   std::cout << "Quit" << endl;
@@ -114,13 +124,12 @@ void Menu::getPlayerInfor() {
   }
   setCursor(true);
   goToXY(7 * 7 + 8, 16);
-  string name;
   do {
-    getline(cin, name);
-    if (name.length() > 10) {
+    getline(cin, uname);
+    if (uname.length() > 10) {
       setCursor(false);
       goToXY(7 * 7 + 8, 16);
-      for (int i = 0; i < name.length() + 1; i++) cout << " ";
+      for (int i = 0; i < uname.length() + 1; i++) cout << " ";
       SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
       goToXY(5 * 7 + 3, 14);
       cout << "Your name must contain less than 10 characters!";
@@ -128,9 +137,9 @@ void Menu::getPlayerInfor() {
       goToXY(7 * 7 + 8, 16);
       setCursor(true);
     }
-  } while (name.length() > 10);
+  } while (uname.length() > 10);
   ofstream fout("leaderboard.txt");
-  fout << name << " ";
+  fout << uname << " ";
   fout.close();
 }
 
@@ -180,19 +189,17 @@ void Menu::LeaderBoard() {
     k++;
   }
   int max_pos;
-  for (int i = 0; i < k; i++)
-  {
+  for (int i = 0; i < k; i++) {
     max_pos = i;
     for (int j = i + 1; j < k; j++) {
-      if (score[j] > score[max_pos])
-        max_pos = j;
-      }
-      if (max_pos != i) {
-        swap(score[max_pos], score[i]);
-        swap(stage[max_pos], stage[i]);
-        swap(name[max_pos], name[i]);
-      }
+      if (score[j] > score[max_pos]) max_pos = j;
     }
+    if (max_pos != i) {
+      swap(score[max_pos], score[i]);
+      swap(stage[max_pos], stage[i]);
+      swap(name[max_pos], name[i]);
+    }
+  }
   int n = 0;
   while (n < 5) {
     for (int i = 0; i < 3; i++) {
