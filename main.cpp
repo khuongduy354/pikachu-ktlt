@@ -1,33 +1,79 @@
 #include <iostream>
 
 #include "game.h"
+#include "menu.h"
 #include "utils.h"
 
 int main() {
   srand((time(nullptr)));
+  // Show Menu
+  Menu menu = Menu();
 
-  //Default config
+  // Default config
   GameConfig config = {8, 8, 1, {64}};
+  GameConfig configs[3] = {{4, 4, 1, {16}}, {6, 6, 1, {36}}, {8, 8, 1, {64}}};
   GameManager game = GameManager(config);
-  // game.start_timer(); 
+  int FPS = 60;
   setCursor(false);
-  resizeWindow(400, 400);
-  std::string name = "Quynh";
-  ;
+  // resizeWindow(400, 400);
+  // std::string name = "Quynh";
+  int stage = 1;
+  int score = 0;
+
+  bool cleared_menu = false;
+
   while (true) {
+    // Sleep(1000 / FPS);
+    if (!menu.enter_game) {
+      menu.showScreen();
+
+      VECI dir = getConsoleInput();
+
+      if (dir.first == -2 && dir.second == -2) {
+        // enter
+        menu.press();
+      } else if (dir.second != 0 || dir.first != 0) {
+        menu.moveSelected();
+      }
+
+      menu.showScreen();
+      continue;
+    } else if (!cleared_menu) {
+      cleared_menu = true; 
+      system("cls");
+    };
+
+    // HANDLE staged cleared
+    if (game.cleared) { 
+      std::cout << "You cleared this stage";
+      system("cls");   
+      GameConfig new_config = configs[0];
+      if(stage > 3 ){  
+        new_config = configs[1];
+      } else if(stage > 6){ 
+        new_config = configs[2];
+      }
+      game = GameManager(new_config);
+      stage++; 
+      continue;
+    }
+
     game.displayBoard();
-    game.BackGround(); 
-    game.displayScore();
+    game.BackGround();
+    game.displayScore(stage, score, menu.uname);
+
     VECI dir = getConsoleInput();
-    if (dir.first == -2 && dir.second == -2)
+
+    if (dir.first == -2 && dir.second == -2) {
       game.pickCell();
-    else
-      game.moveCursor(dir);   
-    Sleep(1000/60);
+      score += game.buffer_score;
+      game.buffer_score = 0;
+    } else if (dir.first == 0 && dir.second == 0) {
+      continue;
+    } else {
+      game.moveCursor(dir);
+    }
   }
 
-
-                                  
-
-return 0;
+  return 0;
 }

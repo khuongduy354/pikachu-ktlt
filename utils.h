@@ -27,3 +27,4 @@ VECI mapCharToPairDir(char a);
 
 void cls();
 VECI getConsoleInput();
+VECI parseInput(int key);

@@ -1,62 +1,70 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include "board.h"
+#include "menu.h"
 
-using namespace std;
-class Menu {
-  int selected = 1;
-  std::string menu_template;
-  std::string uname;
+void Menu::moveSelected() {
+  // 3 options: start, leaderboard, quit
+  selected = (selected + 1) % 3;
+}
 
-//   Menu() {
-//     menu_template =
-//         " \n \\ 
-// |                                      |  \n \\ 
-// |              Pikachoo!               | \n \\
-// |                                      | \n \\ 
-// |    1. Start                          | \n \\
-// |    2. Quit                           | \n \\ 
-// |                                      | \\ 
-// ";
-//     uname = "";
-//   };
-  void moveSelected() {
-    // toggle
-    selected = 1 ? 0 : 1;
+void Menu::showScreen(){
+  if(show_leaderboard) { 
+    LeaderBoard(); 
+  }else{ 
+    showMenu();
   }
-  void press() {
-    if (selected == 1 && uname == "") {
-      std::cout << "Input your name: ";
-      std::cin >> uname;
-    } else if (selected == 1 && uname != "") {
-      // TODO: enter game
-    } else if (selected == 0) {
-      // TODO: quit game
-    }
+}
+
+void Menu::press() { 
+  if(show_leaderboard){
+    system("cls");
+    show_leaderboard = false;
+    return;
   }
-  void highlightSelected() {
-    if (selected == 1) {
-      // goto start and cout start with color
-      //  reset the other color
-    } else if (selected == 0) {
-    }
-  };
-  void showMenu() {
-    goToXY(0, 0);
-    // std::cout << menu_template;
-    highlightSelected();
-  };
+  if (selected == 0 && uname == "") {
+    std::cout << "Input your name: ";
+    std::cin >> uname;
+    std::cout << "Press enter to start game!";
+  } else if (uname != "") {
+    enter_game = true;
+    system("cls");
+  } else if (selected == 1) { 
+    system("cls");
+    show_leaderboard = true;
+  } else if (selected == 2) {
+    exit(0);
+  }
+}
+void Menu::showMenu() {
+  goToXY(0, 0);
+
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                          selected == 0 ? 14 : 15);
+  std::cout << "Start" << endl;
+
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                          selected == 1 ? 14 : 15);
+  std::cout << "Leaderboard" << endl;
+
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+                          selected == 2 ? 14 : 15);
+  std::cout << "Quit" << endl;
 };
 
-void gameTitle() {
-  char gameTitle[][71] = {{" ________  ___  ___  __    ________  ________  ___  ___  ___  ___     "},
-                          {"|\\   __  \\|\\  \\|\\  \\|\\  \\ |\\   __  \\|\\   ____\\|\\  \\|\\  \\|\\  \\|\\  \\    "},
-                          {"\\ \\  \\|\\  \\ \\  \\ \\  \\/  /|\\ \\  \\|\\  \\ \\  \\___|\\ \\  \\ \\  \\ \\  \\ \\  \\   "},
-                          {" \\ \\   ____\\ \\  \\ \\   ___  \\ \\   __  \\ \\  \\    \\ \\   __  \\ \\  \\ \\  \\  "},
-                          {"  \\ \\  \\___|\\ \\  \\ \\   \\ \\  \\ \\  \\ \\  \\ \\  \\____\\ \\  \\ \\  \\ \\  \\ \\  \\ "},
-                          {"   \\ \\__\\    \\ \\__\\ \\__ \\ \\__\\ \\__\\ \\__\\ \\_______\\ \\__\\ \\__\\ \\_______\\"},
-                          {"    \\|__|     \\|__|\\|__| \\|__|\\|__|\\|__|\\|_______|\\|__|\\|__|\\|_______|"}};     
+void Menu::gameTitle() {
+  char gameTitle[][71] = {
+      {" ________  ___  ___  __    ________  ________  ___  ___  ___  ___    "
+       " "},
+      {"|\\   __  \\|\\  \\|\\  \\|\\  \\ |\\   __  \\|\\   ____\\|\\  \\|\\  "
+       "\\|\\  \\|\\  \\    "},
+      {"\\ \\  \\|\\  \\ \\  \\ \\  \\/  /|\\ \\  \\|\\  \\ \\  \\___|\\ \\  "
+       "\\ \\  \\ \\  \\ \\  \\   "},
+      {" \\ \\   ____\\ \\  \\ \\   ___  \\ \\   __  \\ \\  \\    \\ \\   __  "
+       "\\ \\  \\ \\  \\  "},
+      {"  \\ \\  \\___|\\ \\  \\ \\   \\ \\  \\ \\  \\ \\  \\ \\  \\____\\ \\  "
+       "\\ \\  \\ \\  \\ \\  \\ "},
+      {"   \\ \\__\\    \\ \\__\\ \\__ \\ \\__\\ \\__\\ \\__\\ \\_______\\ "
+       "\\__\\ \\__\\ \\_______\\"},
+      {"    \\|__|     \\|__|\\|__| "
+       "\\|__|\\|__|\\|__|\\|_______|\\|__|\\|__|\\|_______|"}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
   for (int i = 0; i < 7; i++) {
     goToXY(3 * 7 + 5, 1 + i);
@@ -64,24 +72,26 @@ void gameTitle() {
   }
 }
 
-void getPlayerInfor() {
-  char table[][63] =        {{" ------------------------------------------------------------ "},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {" ------------------------------------------------------------ "}};
+void Menu::getPlayerInfor() {
+  char table[][63] = {
+      {" ------------------------------------------------------------ "},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {" ------------------------------------------------------------ "}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
   for (int i = 0; i < 9; i++) {
     goToXY(3 * 7 + 7, 11 + i);
-      cout << "                                                                  ";
-    }
+    cout
+        << "                                                                  ";
+  }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   for (int i = 0; i < 7; i++) {
     goToXY(3 * 7 + 9, 12 + i);
-      cout << table[i];
-    }
+    cout << table[i];
+  }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
   goToXY(7 * 7 + 3, 13);
   cout << "ENTER YOUR NAME";
@@ -95,19 +105,17 @@ void getPlayerInfor() {
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   for (int i = 0; i < 3; i++) {
     goToXY(7 * 7 + 6, 15 + i);
-      cout << input[i];
-    }
+    cout << input[i];
+  }
   setCursor(true);
   goToXY(7 * 7 + 8, 16);
   string name;
   do {
     getline(cin, name);
-    if (name.length() > 10)
-    {
+    if (name.length() > 10) {
       setCursor(false);
       goToXY(7 * 7 + 8, 16);
-      for (int i = 0; i < name.length() + 1; i++)
-        cout << " ";
+      for (int i = 0; i < name.length() + 1; i++) cout << " ";
       SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
       goToXY(5 * 7 + 3, 14);
       cout << "Your name must contain less than 10 characters!";
@@ -116,20 +124,24 @@ void getPlayerInfor() {
       setCursor(true);
     }
   } while (name.length() > 10);
-  ofstream fout ("leaderboard.txt");
+  ofstream fout("leaderboard.txt");
   fout << name << " ";
-  fout.close(); 
+  fout.close();
 }
 
-
-void LeaderBoard() {
+void Menu::LeaderBoard() {
   using namespace std;
   setCursor(false);
-  char title[][99] = {{" ,--.   ,------.  ,---.  ,------.  ,------.,------. ,-----.   ,-----.   ,---.  ,------. ,------.  "},
-                      {"|   |   |  .---' /  O  \\ |  .-.  \\ |  .---'|  .--. '|  |) /_ '  .-.  ' /  O  \\ |  .--. '|  .-.  \\ "},
-                      {"|   |   |  `--, |  .-.  ||  |  \\  :|  `--, |  '--'.'|  .-.  \\|  | |  ||  .-.  ||  '--'.'|  |  \\  :"},
-                      {"|   '--.|  `---.|  | |  ||  '--'  /|  `---.|  |\\  \\ |  '--' /'  '-'  '|  | |  ||  |\\  \\ |  '--'  /"},
-                      {"`-----'`------'`--' `--'`-------' `------'`--' '--'`------'  `-----' `--' `--'`--' '--'`-------'  "}};
+  char title[][99] = {{" ,--.   ,------.  ,---.  ,------.  ,------.,------. "
+                       ",-----.   ,-----.   ,---.  ,------. ,------.  "},
+                      {"|   |   |  .---' /  O  \\ |  .-.  \\ |  .---'|  .--. "
+                       "'|  |) /_ '  .-.  ' /  O  \\ |  .--. '|  .-.  \\ "},
+                      {"|   |   |  `--, |  .-.  ||  |  \\  :|  `--, |  '--'.'| "
+                       " .-.  \\|  | |  ||  .-.  ||  '--'.'|  |  \\  :"},
+                      {"|   '--.|  `---.|  | |  ||  '--'  /|  `---.|  |\\  \\ "
+                       "|  '--' /'  '-'  '|  | |  ||  |\\  \\ |  '--'  /"},
+                      {"`-----'`------'`--' `--'`-------' `------'`--' "
+                       "'--'`------'  `-----' `--' `--'`--' '--'`-------'  "}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
   for (int i = 0; i < 5; i++) {
     goToXY(1 * 7 + 5, 1 + i);
@@ -147,10 +159,11 @@ void LeaderBoard() {
   goToXY(11 * 7 + 4, 9);
   cout << "SCORE";
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-  char learderBoard[][62] = {{" -------------------------- ----------------- -------------- "},
-                             {"|                          |                 |              |"},
-                             {" -------------------------- ----------------- -------------- "}};
-  ifstream fin ("leaderboard.txt");
+  char learderBoard[][62] = {
+      {" -------------------------- ----------------- -------------- "},
+      {"|                          |                 |              |"},
+      {" -------------------------- ----------------- -------------- "}};
+  ifstream fin("leaderboard.txt");
   int n = 0;
   string name = " ";
   int stage;
@@ -171,48 +184,50 @@ void LeaderBoard() {
     goToXY(11 * 7 + 5, 12 + n * 3);
     cout << score;
     n++;
-  } 
+  }
   goToXY(3 * 7 + 5 + 4, 15 + n * 3);
   cout << "(Press Space to return to Menu)";
 
   fin.close();
 }
 
-void endGame(int score)
-{
+void Menu::endGame(int score) {
   setCursor(false);
-  char end[][63] = {{"  _____          __  __ ______    ______      ________ _____  "},
-                    {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
-                    {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
-                    {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
-                    {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
-                    {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\"}};
+  char end[][63] = {
+      {"  _____          __  __ ______    ______      ________ _____  "},
+      {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
+      {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
+      {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
+      {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
+      {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  "
+       "\\_\\"}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
   for (int i = 0; i < 6; i++) {
     goToXY(4 * 7 + 2, 1 + i);
     cout << end[i];
   }
-  char table[][63] =        {{" ------------------------------------------------------------ "},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {"|                                                            |"},
-                             {" ------------------------------------------------------------ "}};
+  char table[][63] = {
+      {" ------------------------------------------------------------ "},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {"|                                                            |"},
+      {" ------------------------------------------------------------ "}};
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
   for (int i = 0; i < 8; i++) {
     goToXY(3 * 7 + 7, 13 + i);
-      cout << "                                                                 ";
-    }
+    cout << "                                                                 ";
+  }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
   for (int i = 0; i < 6; i++) {
     goToXY(3 * 7 + 9, 14 + i);
-      cout << table[i];
-    }
+    cout << table[i];
+  }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
   for (int i = 0; i < 4; i++) {
     goToXY(3 * 7 + 10, 15 + i);
-      cout << "                                                            ";
-    }
+    cout << "                                                            ";
+  }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 115);
   goToXY(6 * 7 + 8, 16);
   cout << "YOUR SCORE: ";
@@ -221,4 +236,3 @@ void endGame(int score)
   goToXY(6 * 7 + 3, 18);
   cout << "(Press Space to return to Menu)";
 }
-
