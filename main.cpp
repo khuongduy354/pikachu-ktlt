@@ -11,7 +11,7 @@ int main() {
 
   // Default config
   GameConfig config = {8, 8, 1, {64}};
-  GameConfig configs[3] = {{4, 4, 1, {16}}, {6, 6, 1, {36}}, {8, 8, 1, {64}}};
+  GameConfig configs[3] = {{4, 4, 6, {2, 2, 2, 2, 4, 4}}, {6, 6, 15, {2,2,2,2,2,2,2,2,2,2,4,4,4,4}}, {8, 8, 25, {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,2,2}}};
   GameManager game = GameManager(config);
   int FPS = 60;
   setCursor(false);
