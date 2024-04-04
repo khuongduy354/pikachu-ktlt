@@ -3,6 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <random>
+#include <algorithm>
 #include <string>
 #include "console.h"
 #include "utils.h"

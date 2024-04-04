@@ -121,13 +121,11 @@ Board generateBoard(GameConfig &config) {
     ran_chars = new char[config.distinct_chars];
     for (int i = 0; i < config.distinct_chars; i++)
       ran_chars[i] = static_cast<char>(getRandomInt(65, 90));
-    // Generate board
-    char *chars;
-    chars = new char[config.m * config.n];
-    int index = 0;
+    // Generate board 
+    std::vector<char> chars;
     for (int i = 0; i < config.distinct_chars; i++)
       for (int j = 0; j < config.char_occurences[i]; j++)
-        chars[index++] = ran_chars[i];
+        chars.push_back(ran_chars[i]);
     Board B;
     B.config.m = config.m;
     B.config.n = config.n;
@@ -135,7 +133,8 @@ Board generateBoard(GameConfig &config) {
     for (int i = 0; i < config.distinct_chars; i++)
       B.config.char_occurences[i] = config.char_occurences[i];
     B.c = new Cell *[config.m + 2];
-    int idx = 0;
+
+    std::random_shuffle(chars.begin(), chars.end());
     for (int i = 0; i < config.m + 2; i++) {
       B.c[i] = new Cell[config.n + 2];
       for (int j = 0; j < config.n + 2; j++) {
@@ -147,7 +146,8 @@ Board generateBoard(GameConfig &config) {
         } else {
           B.c[i][j].pos.first = i;
           B.c[i][j].pos.second = j;
-          B.c[i][j].c = chars[idx++];
+          B.c[i][j].c = chars.back();
+          chars.pop_back();
           B.c[i][j].state = 0;
         }
       }
@@ -157,7 +157,6 @@ Board generateBoard(GameConfig &config) {
     B.config.m += 2;
     B.config.n += 2;
     delete[] ran_chars;
-    delete[] chars;
     return B;
   } else {
     Board b;
