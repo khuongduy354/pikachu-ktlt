@@ -76,6 +76,7 @@ int main() {
       // if pressed f , suggest path
       if(key == 'F' || key == 'f'){  
         game.suggestPath();
+        Sleep(1000);
       }
     } else {
       game.moveCursor(dir);
