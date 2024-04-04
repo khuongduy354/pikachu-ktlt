@@ -50,49 +50,48 @@ int main() {
     // Game: stage clear, move to new game
     if (game.cleared) {
       system("cls");
+      stage++;
       // update score at end of stage
       game.saveFile(menu.uname, stage, score);
 
       // pick suitable config based on stage
       GameConfig new_config = configs[0];
-      if (stage > 2) {
+      if (stage > 3 && stage <= 6) {
         new_config = configs[1];
-      } else if (stage > 5) {
+      } else if (stage > 6) {
         new_config = configs[2];
       }
 
       game = GameManager(new_config);
-      stage++;
     }
 
     game.displayBoard();
-    if (stage > 5) {
-      // only apply background to 8x8, which appears at stage 5+
+    if (stage > 6) {
+      // only apply background to 8x8, which appears at stage 6+
       game.BackGround();
     }
     game.displayScore(stage, score, menu.uname);
- 
-
+    
     // handle input
     int key = _getch();
-    VECI dir = parseInput(key); 
+    VECI dir = parseInput(key);
 
-    if (dir.first == -2 && dir.second == -2) { 
+    if (dir.first == -2 && dir.second == -2) {
       // input is enter
       game.pickCell();
       score += game.buffer_score;
       game.buffer_score = 0;
-    } else if (dir.first == 0 && dir.second == 0) { 
+    } else if (dir.first == 0 && dir.second == 0) {
       // if input is not a direction or enter, handle differently
       // if pressed f , suggest path
       if (key == 'F' || key == 'f') {
-        game.suggestPath(); // highlight suggest cells
+        game.suggestPath();  // highlight suggest cells
         Sleep(1000);
       }
-      if (key == KEY_ESC) { 
+      if (key == KEY_ESC) {
         exit(0);
       }
-    } else { 
+    } else {
       // input is direction
       game.moveCursor(dir);
     }
