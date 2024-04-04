@@ -1,5 +1,5 @@
 #include "game.h"
-
+#include <fstream>
 #include <algorithm>
 #include <vector>
 using std::string;
@@ -26,7 +26,12 @@ void GameManager::displayScore(int stage, int score, string uname) {
   drawScore(stage, score, uname);
 };
 void GameManager::BackGround() { drawBackground(B); };
-
+void GameManager::saveFile(string name, int stage, int score) {
+  using namespace std;
+  ofstream fout ("leaderboard.txt", ios::app);
+  fout << endl << name << " " << stage << " " << score;
+  fout.close();
+};
 void GameManager::moveCursor(VECI dir) {
   // wrap around grid
   int ncell_i = (c_idx.first + dir.first) % B.config.m;

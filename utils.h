@@ -23,7 +23,6 @@
 #define ENTER 13
 
 // map input key to directions
-VECI mapCharToPairDir(char a);
 
 void cls();
 VECI getConsoleInput();

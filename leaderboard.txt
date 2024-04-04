@@ -1,1 +1,6 @@
-duy 
+Quynh 2 150
+Duy 5 430
+Hoa 3 240
+Tri 7 790
+Minh 1 40
+Anh 3 260 
