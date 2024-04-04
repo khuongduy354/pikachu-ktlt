@@ -27,7 +27,7 @@ class GameManager {
   bool cleared = false;
   int buffer_score = 0;
   GameManager(GameConfig &config);
-  ~GameManager();
+  // ~GameManager();
 
   // draw board with console
   void displayBoard();

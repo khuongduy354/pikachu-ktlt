@@ -10,9 +10,10 @@ int main() {
   Menu menu = Menu();
 
   // Default config
-  GameConfig config = {8, 8, 1, {64}};
+  // GameConfig config = {8, 8, 1, {64}};
   GameConfig configs[3] = {{4, 4, 6, {2, 2, 2, 2, 4, 4}}, {6, 6, 15, {2,2,2,2,2,2,2,2,2,2,4,4,4,4}}, {8, 8, 25, {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,2,2}}};
-  GameManager game = GameManager(config);
+  GameConfig start_config = configs[0];
+  GameManager game = GameManager(start_config);
   int FPS = 60;
   setCursor(false);
   // resizeWindow(400, 400);
@@ -46,7 +47,6 @@ int main() {
     // HANDLE staged cleared
     if (game.cleared) { 
       system("cls");   
-      std::cout << "You cleared this stage";
       GameConfig new_config = configs[0];
       if(stage > 3 ){  
         new_config = configs[1];
@@ -55,11 +55,12 @@ int main() {
       }
       game = GameManager(new_config);
       stage++; 
-      continue;
     }
 
     game.displayBoard();
+    if(stage > 6){
     game.BackGround();
+    }
     game.displayScore(stage, score, menu.uname); 
 
 

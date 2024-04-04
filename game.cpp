@@ -15,11 +15,11 @@ GameManager::GameManager(GameConfig &config) {
 
   updateSuggestPair();
 };
-GameManager::~GameManager() {
-  for (int i = 0; i < B.config.m; i++) {
-    delete[] b[i];
-  }
-}
+// GameManager::~GameManager() {
+//   for (int i = 0; i < B.config.m; i++) {
+//     delete[] b[i];
+//   }
+// }
 
 void GameManager::displayBoard() { showBoard(B); };
 void GameManager::displayScore(int stage, int score, string uname) {
@@ -56,45 +56,46 @@ void GameManager::moveCursor(VECI dir) {
 
 void GameManager::scramble() {
   // save remaining letters to vec
-  vector<char> letters = {};
-  for (int i = 0; i < B.config.m; i++) {
-    for (int j = 0; j < B.config.n; j++) {
-      char curr_let = b[i][j];
-      if ('A' <= curr_let && curr_let <= 'Z') {
-        letters.push_back(curr_let);
-      };
-    }
-  }
+  // vector<char> letters = {};
+  // for (int i = 0; i < B.config.m; i++) {
+  //   for (int j = 0; j < B.config.n; j++) {
+  //     char curr_let = b[i][j];
+  //     if ('A' <= curr_let && curr_let <= 'Z') {
+  //       letters.push_back(curr_let);
+  //     };
+  //   }
+  // }
 
-  // scramble vec
-  std::random_shuffle(letters.begin(), letters.end());
+  // // scramble vec
+  // std::random_shuffle(letters.begin(), letters.end());
 
-  // generate positions to place letters
-  vector<VECI> positions = {};
+  // // generate positions to place letters
+  // vector<VECI> positions = {};
 
-  // exclude borders
-  for (int i = 1; i < B.config.m - 1; i++) {
-    for (int j = 1; j < B.config.n - 1; j++) {
-      positions.push_back(VECI{i, j});
-    };
-  };
-  // scramble position
-  std::random_shuffle(positions.begin(), positions.end());
+  // // exclude borders
+  // for (int i = 1; i < B.config.m - 1; i++) {
+  //   for (int j = 1; j < B.config.n - 1; j++) {
+  //     positions.push_back(VECI{i, j});
+  //   };
+  // };
+  // // scramble position
+  // std::random_shuffle(positions.begin(), positions.end());
 
-  // put letters into positions
-  for (int i = 0; i < letters.size(); i++) {
-    VECI pos = positions.at(i);
-    char let = letters.at(i);
+  // // put letters into positions
+  // for (int i = 0; i < letters.size(); i++) {
+  //   VECI pos = positions.at(i);
+  //   char let = letters.at(i);
 
-    b[pos.first][pos.second] = let;
-  }
+  //   b[pos.first][pos.second] = let;
+  // }
 
-  // update struct Board
-  for (int i = 0; i < B.config.m; i++) {
-    for (int j = 0; j < B.config.n; j++) {
-      B.c[i][j].c = b[i][j];
-    }
-  }
+  // // update struct Board
+  // for (int i = 0; i < B.config.m; i++) {
+  //   for (int j = 0; j < B.config.n; j++) {
+  //     B.c[i][j].c = b[i][j];
+  //   }
+  // }
+  return;
 }
 
 Cell *GameManager::getCell(VECI pos) {
@@ -113,7 +114,9 @@ bool GameManager::suggestPath() {
 
   // TODO: draw suggested line  
   Cell *c1 = suggest_pair.first;
-  Cell *c2 = suggest_pair.second; 
+  Cell *c2 = suggest_pair.second;  
+
+  correctCells(c1,c2);
  
   return true;
 }
@@ -153,10 +156,13 @@ void GameManager::checkForMatching() {
     // add 10 points
     buffer_score += 10;
 
+
+    // if board clear, don't check suggest pair
+    if(checkBoardCleared()) return;
+
     // check for valid pair, and scramble if board not solveable
     updateSuggestPair();
 
-    checkBoardCleared();
   } else {
     wrongCells(cell_1, cell_2);
     wrongSound();
