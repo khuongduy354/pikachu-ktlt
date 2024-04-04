@@ -1,5 +1,6 @@
 #include "console.h"
 
+// move cursor to position x,y on terminal
 void goToXY(int x, int y) {
   HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
   COORD cursorPosition;
@@ -8,6 +9,7 @@ void goToXY(int x, int y) {
   SetConsoleCursorPosition(console, cursorPosition);
 }
 
+// set cursor visiblitiy
 void setCursor(bool visible) {
   HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_CURSOR_INFO lpCursor;

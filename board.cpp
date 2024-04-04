@@ -121,7 +121,8 @@ Board generateBoard(GameConfig &config) {
     ran_chars = new char[config.distinct_chars];
     for (int i = 0; i < config.distinct_chars; i++)
       ran_chars[i] = static_cast<char>(getRandomInt(65, 90));
-    // Generate board 
+
+    // Generate board
     std::vector<char> chars;
     for (int i = 0; i < config.distinct_chars; i++)
       for (int j = 0; j < config.char_occurences[i]; j++)
@@ -134,6 +135,7 @@ Board generateBoard(GameConfig &config) {
       B.config.char_occurences[i] = config.char_occurences[i];
     B.c = new Cell *[config.m + 2];
 
+    // place chars into board, randomly
     std::random_shuffle(chars.begin(), chars.end());
     for (int i = 0; i < config.m + 2; i++) {
       B.c[i] = new Cell[config.n + 2];
@@ -152,6 +154,8 @@ Board generateBoard(GameConfig &config) {
         }
       }
     }
+
+    //cleanup
     config.m += 2;
     config.n += 2;
     B.config.m += 2;

@@ -16,7 +16,7 @@ using std::priority_queue;
 using std::unordered_map;
 using std::vector;
 
-// null point for function returning point, indicating not found, not valid
+// null point for function returning point indicating not found, not valid
 #define NULL_POINT  \
   Point {           \
     VECI { -1, -1 } \
@@ -44,58 +44,61 @@ struct Point {
     return Point{VECI{x, y}};
   }
 
-  // Hash function for unordered_map
+  // Hash function for unordered_map (hashmap)
   struct Hash {
     size_t operator()(const Point &p) const {
       return std::hash<int>()(p.pos.first) ^ std::hash<int>()(p.pos.first);
     }
   };
 };
+
 // Comparison function for the priority_queue (min heap)
 struct CompareCost {
   bool operator()(pair<float, Point> a, pair<float, Point> b) const {
     return a.first > b.first;
   }
 };
-class CostTracker {  // In A* algorithm, we need to pick the point with the
-  // lowest cost frequently,
-  // so a binary heap is a suitable data structure.
+class CostTracker {  
+  // In A* algorithm, we need to pick the point with the
+  // lowest cost frequently, this class is dedicated to track cost for pathfinding.
 
  public:
   // min heap, store cost-point pair, with cost as index.
   priority_queue<pair<float, Point>, vector<pair<float, Point>>, CompareCost>
       cost_heap;
 
+  // hashmap to track evaluated points to prevent duplicate.
+  unordered_map<Point, float, Point::Hash> cost_hashmap;
+
   void insert(Point a, float cost);
   Point pop_point_with_least_cost();
-
-  // track evaluated points to prevent duplicate.
-  unordered_map<Point, float, Point::Hash> cost_hashmap;
 };
 
-// Board representation: 2D array of char
-// '\0' is obstacle
-// ' ' is empty
-// 'A' is letter
 
 class AstarGrid {
  public:
   CostTracker cost_tracker;
   AstarGrid(char **board, int _m, int _n);
 
-  // A* search algorithm, return full path of Points
+  // A* search algorithm, return vector of Points as path, vector empty if no path found 
   vector<Point> find_path(const Point &start, const Point &end);
   int m;
   int n;
   void display_board(); 
 
-  // suggest 2 point that can be matched, if none is found -> return pair of NULL_POINT
+  // suggest 2 point that can be matched, if none is found, return pair of NULL_POINT
   pair<Point,Point> suggest_path(); 
 
 
  private:
-  char **board;
-  float cal_cost(const Point &curr, const Point &start, const Point &end);
+  char **board; 
+
+  // calculate cost given curr , start, end positions
+  float cal_cost(const Point &curr, const Point &start, const Point &end);  
+
+  // trace back the path after searching is completed
   vector<Point> trace_path(const Point &target);
+
+  // check if point out of bound, for e.g: negative coordinates or coordinates > config.m, config.n
   bool is_out_of_bound(Point p);
 };

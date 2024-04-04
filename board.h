@@ -32,7 +32,10 @@ struct Board {
 
 //handle game board
 Board generateBoard(GameConfig &config); 
-char **toCharBoard(Board B);  // convert board to char array (for easier pathfinding)
+// char Board representation: 2D array of char
+// ' ' is empty
+// 'A' is letter, B,C,D,...
+char **toCharBoard(Board B);  // convert struct board to char board (for pathfinding)
 void drawCell(Cell c, Board B);
 void showBoard(Board &B);
 void deleteBoard();

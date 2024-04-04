@@ -1,13 +1,15 @@
 #include "game.h"
-#include <fstream>
+
 #include <algorithm>
+#include <fstream>
 #include <vector>
 using std::string;
 using std::vector;
 
+// GameManager implementation
 GameManager::GameManager(GameConfig &config) {
   B = generateBoard(config);
-  c_idx = VECI{1,1};
+  c_idx = VECI{1, 1};
   cleared = false;
   B.c[1][1].state = 2;
   b = toCharBoard(B);
@@ -15,11 +17,6 @@ GameManager::GameManager(GameConfig &config) {
 
   updateSuggestPair();
 };
-// GameManager::~GameManager() {
-//   for (int i = 0; i < B.config.m; i++) {
-//     delete[] b[i];
-//   }
-// }
 
 void GameManager::displayBoard() { showBoard(B); };
 void GameManager::displayScore(int stage, int score, string uname) {
@@ -28,12 +25,12 @@ void GameManager::displayScore(int stage, int score, string uname) {
 void GameManager::BackGround() { drawBackground(B); };
 void GameManager::saveFile(string name, int stage, int score) {
   using namespace std;
-  ofstream fout ("leaderboard.txt", ios::app);
+  ofstream fout("leaderboard.txt", ios::app);
   fout << endl << name << " " << stage << " " << score;
   fout.close();
 };
 void GameManager::moveCursor(VECI dir) {
-  // wrap around grid
+  // set positions to wrap around grid
   int ncell_i = (c_idx.first + dir.first) % B.config.m;
   int ncell_j = (c_idx.second + dir.second) % B.config.n;
 
@@ -41,9 +38,10 @@ void GameManager::moveCursor(VECI dir) {
 
   if (ncell_j < 0) ncell_j = B.config.n - 1;
 
-  // previsous cell
+  // get previous cell
   Cell *prev_cell = getCell(c_idx);
-  // set cursor
+
+  // set cursor to new cell
   c_idx.first = ncell_i;
   c_idx.second = ncell_j;
 
@@ -57,12 +55,11 @@ void GameManager::moveCursor(VECI dir) {
       prev_cell->state = 0;
     }
   }
-    
 }
 
 void GameManager::scramble() {
   // save remaining letters to vec
-  vector<char> letters; 
+  vector<char> letters;
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
       char curr_let = b[i][j];
@@ -88,9 +85,9 @@ void GameManager::scramble() {
   // scramble positions
   std::random_shuffle(positions.begin(), positions.end());
 
-  // reset board 
+  // reset board
   for (int i = 0; i < B.config.m; i++) {
-    for (int j = 0; j < B.config.n; j++) { 
+    for (int j = 0; j < B.config.n; j++) {
       b[i][j] = ' ';
     }
   }
@@ -113,6 +110,7 @@ void GameManager::scramble() {
 }
 
 Cell *GameManager::getCell(VECI pos) {
+  // get cell based on position
   for (int i = 0; i < B.config.m; i++) {
     for (int j = 0; j < B.config.n; j++) {
       if (pos.first == i && pos.second == j) {
@@ -126,12 +124,12 @@ Cell *GameManager::getCell(VECI pos) {
 bool GameManager::suggestPath() {
   if (suggest_pair.first == NULL || suggest_pair.second == NULL) return false;
 
-  // TODO: draw suggested line  
   Cell *c1 = suggest_pair.first;
-  Cell *c2 = suggest_pair.second;  
+  Cell *c2 = suggest_pair.second;
 
-  correctCells(c1,c2);
- 
+  // draw suggested line
+  correctCells(c1, c2);
+
   return true;
 }
 
@@ -149,17 +147,22 @@ void GameManager::checkForMatching() {
   cell_1->state = 0;
   cell_2->state = 0;
 
-  // found
+  // path found means matched
   if (paths.size() > 0) {
+    // SFX + VFX
     correctCells(cell_1, cell_2);
     correctSound();
     for (int i = 0; i < paths.size() - 1; i++)
       drawLine(paths[i].pos, paths[i + 1].pos);
     Sleep(120);
+
+    // clear the matched cells
     cell_1->c = ' ';
     cell_1->state = -1;
     cell_2->c = ' ';
     cell_2->state = -1;
+
+    // VFX: clear suggest line
     for (int i = 0; i < paths.size() - 1; i++)
       deleteLine(paths[i].pos, paths[i + 1].pos);
 
@@ -170,43 +173,46 @@ void GameManager::checkForMatching() {
     // add 10 points
     buffer_score += 10;
 
-
     // if board clear, don't check suggest pair
-    if(checkBoardCleared()) return;
+    if (checkBoardCleared()) return;
 
     // check for valid pair, and scramble if board not solveable
     updateSuggestPair();
-
   } else {
+    // sfx+vfx when not matched
     wrongCells(cell_1, cell_2);
     wrongSound();
     Sleep(120);
+
+    // remove cell highlight
     cell_1->state = 0;
     cell_2->state = 0;
   }
 
+  // unselect cells
   selected_pair.first = NULL;
   selected_pair.second = NULL;
 
   // highlight cell under cursor
   Cell *c_under_cursor = getCell(c_idx);
   if (c_under_cursor != NULL) c_under_cursor->state = 2;
-}; 
+};
 
 void GameManager::pickCell() {
   Cell *c_under_cursor = getCell(c_idx);
-  selectSound(); 
-  if(c_under_cursor == NULL) return;
+  selectSound();
+  if (c_under_cursor == NULL) return;
 
-  // cell under cursor is already selected
+  // skip cell under cursor is already selected
   if (c_under_cursor == selected_pair.first ||
       c_under_cursor == selected_pair.second)
     return;
-  // both cell selected
+  // skip both cell selected
   if (selected_pair.first != NULL && selected_pair.second != NULL) return;
 
-  // dont select cell if not a letter
+  // skip select cell if not a letter
   if (c_under_cursor->c == ' ') return;
+
 
   if (selected_pair.first == NULL && selected_pair.second == NULL) {
     // first cell selected
@@ -221,18 +227,23 @@ void GameManager::pickCell() {
   }
 };
 
-void GameManager::updateSuggestPair() {
+void GameManager::updateSuggestPair() { 
+  // get suggest pairs
   pair<Point, Point> paths = pathfinder.suggest_path();
   Point start = paths.first;
   Point end = paths.second;
 
   while (start == NULL_POINT || end == NULL_POINT) {
+    // scramble until a pair is found  
     scramble();
     paths = pathfinder.suggest_path();
     start = paths.first;
-    end = paths.second;
+    end = paths.second; 
+
+    // in case this run infinitely, this mean the board generation is invalid 
   }
 
+  // saved suggest pairs
   suggest_pair.first = getCell(start.pos);
   suggest_pair.second = getCell(end.pos);
 }

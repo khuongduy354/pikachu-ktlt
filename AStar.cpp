@@ -4,25 +4,29 @@
 
 #include "utils.h"
 
-// CostTracker implementation
 void CostTracker::insert(Point a, float cost) {
-  // if not evaluated
+  // only track point-cost, if it's not calculated before
   if (cost_hashmap.find(a) == cost_hashmap.end()) {
-    cost_hashmap.insert({a, cost});  // O(1)
-    cost_heap.push({cost, a});       // O(logn)
+    // save to heap, it will reorder so that the point with lowest cost is
+    // accessed most efficiently
+    cost_heap.push({cost, a});
+
+    // insert to hashmap means calculated, do not calculate this point again.
+    cost_hashmap.insert({a, cost});
   }
 }
 
 Point CostTracker::pop_point_with_least_cost() {
   if (cost_heap.empty()) return NULL_POINT;
 
-  Point p = cost_heap.top().second;  // O(1)
+  // get lowest cost point with O(1)
+  Point p = cost_heap.top().second;
 
-  cost_heap.pop();  // O(logn)
+  // remove from heap
+  cost_heap.pop();
   return p;
 }
 
-// AStar implementation
 AstarGrid::AstarGrid(char **board, int _m, int _n) {
   this->board = board;
   this->m = _m;
@@ -30,6 +34,7 @@ AstarGrid::AstarGrid(char **board, int _m, int _n) {
 }
 
 vector<Point> AstarGrid::trace_path(const Point &target) {
+  // Trace path, return vector of points from destination to starting.
   vector<Point> result = {};
 
   // NULL_POINT means no path found, return empty vector
@@ -39,8 +44,8 @@ vector<Point> AstarGrid::trace_path(const Point &target) {
   Point curr = target;
   result.push_back(curr);
 
+  // check if nearest point to destination is a turn.
   int turn_count = 0;
-  // if cost >= 1000 means there a turn made
   auto pair = cost_tracker.cost_hashmap.find(curr);
   if (pair != cost_tracker.cost_hashmap.end()) {
     int cost = pair->second;
@@ -53,14 +58,14 @@ vector<Point> AstarGrid::trace_path(const Point &target) {
   while (curr.parent != NULL) {
     curr = *curr.parent;
 
-    // if cost >= 1000 means there a turn made
+    // check turns
     auto pair = cost_tracker.cost_hashmap.find(curr);
     if (pair != cost_tracker.cost_hashmap.end()) {
       int cost = pair->second;
       if (cost >= 1000) {
-        // std::cout << "Turned at: " << curr.pos.first << "," << curr.pos.second
-        //           << endl;
         turn_count++;
+
+        // consider path invalid if turning times is > 2
         if (turn_count > 2) return vector<Point>{};
       }
     }
@@ -79,21 +84,25 @@ bool AstarGrid::is_out_of_bound(Point p) {
 };
 
 vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
-  // check if start and end letters are the same
+  // Searching algorithm
+
+  // Check if starting letter match ending letter
   if (board[start.pos.first][start.pos.second] !=
       board[end.pos.first][end.pos.second]) {
-    return {};  // NO PATH FOUND
+    return {};
   }
 
-  // STEP 1: Find the path
+  // STEP 1: Find the target
   cost_tracker = CostTracker();
   Point target = start;
 
   // Calculate cost for neighbors, starting from start point
   while (target != end && target != NULL_POINT) {
-    // calculate cost of neighbors
+    // 4 directions: up down left right
     Point dirs[4] = {Point{VECI{0, 1}}, Point{VECI{0, -1}}, Point{VECI{1, 0}},
                      Point{VECI{-1, 0}}};
+
+    // calculate each direction (each neighbor)
     for (Point dir : dirs) {
       Point neighbor = target + dir;
 
@@ -109,20 +118,20 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
       // skip lettered cell that is not the target letter
       if (n_char != ' ' && neighbor != end) continue;
 
-      // set parent for path tracing
+      // set parent for later path tracing
       Point *parent = new Point(target);
       neighbor.parent = parent;
 
       // evaluate cost
       float cost = cal_cost(neighbor, start, end);
-
       cost_tracker.insert(neighbor, cost);
     }
 
     // pick next lowest cost target
     target = cost_tracker.pop_point_with_least_cost();
-    // if (target != NULL_POINT ) std::cout << target.pos.first << "," <<
-    // target.pos.second << endl; continue until target reach destination
+
+    // continue until end point is reached or no more points on board to
+    // calculate
   }
 
   // STEP 2: Trace back the path
@@ -131,14 +140,15 @@ vector<Point> AstarGrid::find_path(const Point &start, const Point &end) {
 
 float AstarGrid::cal_cost(const Point &curr, const Point &start,
                           const Point &end) {
-  // manhattan distance
-  // int g = sqrt(pow(curr.x - start.x,2) + pow(curr.y - start.y,2));
+  // calculate distance heuristic,
+  // since distance doesn't matter, ignore distance to starting
+  // only calculate distance to destination
   float h = sqrt(powf(curr.pos.first - end.pos.first, 2) +
                  powf(curr.pos.second - end.pos.second, 2));
 
   float f = h;
 
-  // turning cost
+  // calculate turning cost
   // need at lest 3 points to determine a turn, otherwise 0 turning cost
   if (curr.parent == NULL || curr.parent->parent == NULL) {
     return f;
@@ -148,15 +158,17 @@ float AstarGrid::cal_cost(const Point &curr, const Point &start,
   Point *middle = curr.parent;
 
   // check if the 3 points are in the same line
+  // if 3 x are equal, it means on same x axis
+  // if 3 y are equal, it means on same y axis
   bool on_same_x_axis = furthest->pos.first == middle->pos.first &&
                         middle->pos.first == curr.pos.first;
   bool on_same_y_axis = furthest->pos.second == middle->pos.second &&
                         middle->pos.second == curr.pos.second;
-  if (on_same_x_axis || on_same_y_axis) {
-    return f;
-  } else {
-    // a turn is made, add 1000 as cost
-    return f + 1000;
+
+  // if either on x or on y axis, these 3 points are considered on the same line
+  // if 3 points aren't on the same line, then a turn is made, add 1000 to cost;
+  if (!(on_same_x_axis || on_same_y_axis)) {
+    f += 1000;
   }
   return f;
 };
@@ -171,26 +183,28 @@ void AstarGrid::display_board() {
 };
 
 pair<Point, Point> AstarGrid::suggest_path() {
-  // from board, group Points into letter
-  // each letter (A-Z) has a number of points;
+  // from board, group into array of letters, so that
+  // each letter contains a vector of points
   vector<Point> letter_points[26];
 
-  // initialize default array
+  // initialize default empty array
   for (int i = 0; i < 26; i++) {
     letter_points[i] = {};
   }
 
+  // start scanning and grouping
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       char c = board[i][j];
       if (c >= 'A' && c <= 'Z') {
+        // c-'A' outputs the integer from 0-25, representing 26 letters in
+        // alphabet
         letter_points[c - 'A'].push_back(Point{VECI{i, j}});
       }
     }
   }
 
   // for each letter, find_path for every combination of 2 points
-  // first path found, return it
   for (int i = 0; i < 26; i++) {
     if (letter_points[i].size() < 2) continue;
 
@@ -200,6 +214,7 @@ pair<Point, Point> AstarGrid::suggest_path() {
         vector<Point> path =
             find_path(letter_points[i][j], letter_points[i][k]);
         if (path.size() > 0) {
+          // first path found, return it
           return {letter_points[i][j], letter_points[i][k]};
         }
       }
@@ -207,5 +222,5 @@ pair<Point, Point> AstarGrid::suggest_path() {
   }
 
   // after all iteration, none found -> return NULL_POINT
-  return pair<Point,Point>{NULL_POINT, NULL_POINT};
+  return pair<Point, Point>{NULL_POINT, NULL_POINT};
 };
