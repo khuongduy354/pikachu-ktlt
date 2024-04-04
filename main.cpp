@@ -48,7 +48,6 @@ int main() {
     if (game.cleared) { 
       system("cls");   
       game.saveFile(menu.uname, stage, score);
-      std::cout << "You cleared this stage";
       GameConfig new_config = configs[0];
       if(stage > 2){  
         new_config = configs[1];
