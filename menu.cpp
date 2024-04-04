@@ -211,7 +211,7 @@ void Menu::LeaderBoard() {
     n++;
   }
   goToXY(3 * 7 + 5 + 20, 16 + n * 3);
-  cout << "(Press Space to return to Menu)";
+  cout << "(Press Enter to return to Menu)";
 
   fin.close();
 }
