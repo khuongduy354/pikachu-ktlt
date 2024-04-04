@@ -48,9 +48,9 @@ int main() {
     if (game.cleared) { 
       system("cls");   
       GameConfig new_config = configs[0];
-      if(stage > 3 ){  
+      if(stage > 2){  
         new_config = configs[1];
-      } else if(stage > 6){ 
+      } else if(stage > 5){ 
         new_config = configs[2];
       }
       game = GameManager(new_config);
@@ -58,7 +58,7 @@ int main() {
     }
 
     game.displayBoard();
-    if(stage > 6){
+    if(stage > 5){
     game.BackGround();
     }
     game.displayScore(stage, score, menu.uname); 

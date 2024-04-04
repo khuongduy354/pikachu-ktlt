@@ -7,9 +7,9 @@ using std::vector;
 
 GameManager::GameManager(GameConfig &config) {
   B = generateBoard(config);
-  c_idx = VECI{0, 0};
+  c_idx = VECI{1,1};
   cleared = false;
-  B.c[0][0].state = 2;
+  B.c[1][1].state = 2;
   b = toCharBoard(B);
   pathfinder = AstarGrid(b, config.m, config.n);
 
@@ -52,49 +52,58 @@ void GameManager::moveCursor(VECI dir) {
       prev_cell->state = 0;
     }
   }
+    
 }
 
 void GameManager::scramble() {
   // save remaining letters to vec
-  // vector<char> letters = {};
-  // for (int i = 0; i < B.config.m; i++) {
-  //   for (int j = 0; j < B.config.n; j++) {
-  //     char curr_let = b[i][j];
-  //     if ('A' <= curr_let && curr_let <= 'Z') {
-  //       letters.push_back(curr_let);
-  //     };
-  //   }
-  // }
+  vector<char> letters; 
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      char curr_let = b[i][j];
+      if ('A' <= curr_let && curr_let <= 'Z') {
+        letters.push_back(curr_let);
+      };
+    }
+  }
 
-  // // scramble vec
-  // std::random_shuffle(letters.begin(), letters.end());
+  // scramble vec
+  std::random_shuffle(letters.begin(), letters.end());
 
-  // // generate positions to place letters
-  // vector<VECI> positions = {};
+  // generate positions to place letters
+  vector<VECI> positions = {};
 
-  // // exclude borders
-  // for (int i = 1; i < B.config.m - 1; i++) {
-  //   for (int j = 1; j < B.config.n - 1; j++) {
-  //     positions.push_back(VECI{i, j});
-  //   };
-  // };
-  // // scramble position
-  // std::random_shuffle(positions.begin(), positions.end());
+  // exclude borders
+  for (int i = 1; i < B.config.m - 1; i++) {
+    for (int j = 1; j < B.config.n - 1; j++) {
+      positions.push_back(VECI{i, j});
+    };
+  };
 
-  // // put letters into positions
-  // for (int i = 0; i < letters.size(); i++) {
-  //   VECI pos = positions.at(i);
-  //   char let = letters.at(i);
+  // scramble positions
+  std::random_shuffle(positions.begin(), positions.end());
 
-  //   b[pos.first][pos.second] = let;
-  // }
+  // reset board 
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) { 
+      b[i][j] = ' ';
+    }
+  }
 
-  // // update struct Board
-  // for (int i = 0; i < B.config.m; i++) {
-  //   for (int j = 0; j < B.config.n; j++) {
-  //     B.c[i][j].c = b[i][j];
-  //   }
-  // }
+  // put letters into positions
+  for (int i = 0; i < letters.size(); i++) {
+    VECI pos = positions.at(i);
+    char let = letters.at(i);
+
+    b[pos.first][pos.second] = let;
+  }
+
+  // update struct Board
+  for (int i = 0; i < B.config.m; i++) {
+    for (int j = 0; j < B.config.n; j++) {
+      B.c[i][j].c = b[i][j];
+    }
+  }
   return;
 }
 
@@ -181,7 +190,9 @@ void GameManager::checkForMatching() {
 
 void GameManager::pickCell() {
   Cell *c_under_cursor = getCell(c_idx);
-  selectSound();
+  selectSound(); 
+  if(c_under_cursor == NULL) return;
+
   // cell under cursor is already selected
   if (c_under_cursor == selected_pair.first ||
       c_under_cursor == selected_pair.second)
