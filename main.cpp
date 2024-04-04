@@ -52,7 +52,9 @@ int main() {
         new_config = configs[1];
       } else if(stage > 5){ 
         new_config = configs[2];
-      }
+      } 
+
+
       game = GameManager(new_config);
       stage++; 
     }
@@ -77,6 +79,9 @@ int main() {
       if(key == 'F' || key == 'f'){  
         game.suggestPath();
         Sleep(1000);
+      } 
+      if(key == KEY_ESC){ 
+        exit(0);
       }
     } else {
       game.moveCursor(dir);

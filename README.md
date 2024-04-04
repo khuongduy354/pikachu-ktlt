@@ -32,6 +32,10 @@ Quynh: Keyboard input, visual, save game, 2D array generation
  
 
 # Todo:  
-- make sure game continue, with increase difficulties (sizes) as config  
-- cout: press f to suggest, and color when suggest. 
-- menu print pretty: title + name input DONE.
+- make sure game continue, with increase difficulties (sizes) as config   DONE 
+- cout: press f to suggest, and color when suggest.  DONE 
+- menu print pretty: title + name input DONE. 
+
+- save file   
+enter same username, = no append  to file
+end of stage, find that username, if stage is greater, save stage and score 
