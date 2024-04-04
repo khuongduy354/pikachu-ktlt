@@ -33,7 +33,7 @@ class GameManager {
   void displayBoard();
   void displayScore(int stage, int score, std::string uname);
   void BackGround();
-
+  void saveFile(std::string name, int stage, int score);
 
   // scramble board;
   void scramble();
