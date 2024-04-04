@@ -23,5 +23,4 @@ class Menu {
   void gameTitle();
   void getPlayerInfor();
   void LeaderBoard();
-  void endGame(int score);
 };

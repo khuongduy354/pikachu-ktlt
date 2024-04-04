@@ -5,6 +5,8 @@
 #include <utility>
 #include <conio.h>
 
+// providing helper functions, definitions  
+
 // pair<int,int> use as integer vector (for coordinates)
 #ifndef VECI
 #define VECI std::pair<int, int>

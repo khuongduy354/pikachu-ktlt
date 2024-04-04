@@ -7,45 +7,52 @@
 #include "board.h"
 #include "playSound.h"
 void Menu::moveSelected() {
-  // 3 options: start, leaderboard, quit
+  // toggle between 3 options: start, leaderboard, quit
   selected = (selected + 1) % 3;
 }
 
-void Menu::showScreen() {
-  if (show_leaderboard) {
+void Menu::showScreen() {  
+  // show leaderboard  has higher priority than menu
+  if (show_leaderboard) {  
     LeaderBoard();
-  } else if(uname == "") {
+  } else if (uname == "") { 
+    // if uname is not empty, means user typed name and entered game 
     showMenu();
   }
   menuSound();
 }
 
 void Menu::press() {
-  if (show_leaderboard) {
+  if (show_leaderboard) { 
+    // turn off leaderboard if is showing
     system("cls");
     show_leaderboard = false;
     return;
   }
-  if (selected == 0 && uname == "") {
-    getPlayerInfor();
-    // std::cout << "Input your name: ";
-    // std::cin >> uname;
-    goToXY(7 * 7 , 20);
+
+  if (selected == 0 && uname == "") { 
+    // start is pressed (idx = 0) and allowing input name
+    getPlayerInfor(); 
+    goToXY(7 * 7, 20);
     std::cout << "Press enter to start game!";
   } else if (uname != "") { 
+    // enter game if name is inputted
     system("cls");
     enter_game = true;
-  } else if (selected == 1) {
+  } else if (selected == 1) { 
+    // show leaderboard if leaderboard is pressed (idx = 1)
     system("cls");
     show_leaderboard = true;
-  } else if (selected == 2) {
+  } else if (selected == 2) { 
+    // exit pressed (idx = 2)
     exit(0);
   }
 }
-void Menu::showMenu() {
+void Menu::showMenu() { 
+  // draw main menu
   goToXY(0, 0);
   gameTitle();
-  std::cout << endl; 
+  std::cout << endl;
 
   goToXY(7 * 6, 14);
   std::cout << "Press arrow key to move down & Enter to select." << endl;
@@ -87,7 +94,8 @@ void Menu::gameTitle() {
     cout << gameTitle[i];
   }
 }
-void Menu::getPlayerInfor() {
+void Menu::getPlayerInfor() { 
+  // prompt panel for user input 
   char table[][63] = {
       {" ------------------------------------------------------------ "},
       {"|                                                            |"},
@@ -140,7 +148,8 @@ void Menu::getPlayerInfor() {
   } while (uname.length() > 10);
 }
 
-void Menu::LeaderBoard() {
+void Menu::LeaderBoard() { 
+  // draw leaderboard
   using namespace std;
   setCursor(false);
   char title[][99] = {{" ,--.   ,------.  ,---.  ,------.  ,------.,------. "
@@ -170,10 +179,11 @@ void Menu::LeaderBoard() {
   goToXY(11 * 7 + 4, 9);
   cout << "SCORE";
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-  char learderBoard[][62] = {{" -------------------------- ----------------- -------------- "},
-                             {"|                          |                 |              |"},
-                             {" -------------------------- ----------------- -------------- "}};
-  ifstream fin ("leaderboard.txt");
+  char learderBoard[][62] = {
+      {" -------------------------- ----------------- -------------- "},
+      {"|                          |                 |              |"},
+      {" -------------------------- ----------------- -------------- "}};
+  ifstream fin("leaderboard.txt");
   string name[50] = {" "};
   int stage[50];
   int score[50];
@@ -214,49 +224,4 @@ void Menu::LeaderBoard() {
   cout << "(Press Enter to return to Menu)";
 
   fin.close();
-}
-
-void Menu::endGame(int score) {
-  setCursor(false);
-  endSound();
-  char end[][63] = {{"  _____          __  __ ______    ______      ________ _____  "},
-                    {" / ____|   /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\ "},
-                    {"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |"},
-                    {"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  / "},
-                    {"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\ "},
-                    {" \\_____/_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\"}};
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
-  for (int i = 0; i < 6; i++) {
-    goToXY(4 * 7 + 2, 1 + i);
-    cout << end[i];
-  }
-  char table[][63] = {
-      {" ------------------------------------------------------------ "},
-      {"|                                                            |"},
-      {"|                                                            |"},
-      {"|                                                            |"},
-      {"|                                                            |"},
-      {" ------------------------------------------------------------ "}};
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
-  for (int i = 0; i < 8; i++) {
-    goToXY(3 * 7 + 7, 13 + i);
-    cout << "                                                                 ";
-  }
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-  for (int i = 0; i < 6; i++) {
-    goToXY(3 * 7 + 9, 14 + i);
-    cout << table[i];
-  }
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 120);
-  for (int i = 0; i < 4; i++) {
-    goToXY(3 * 7 + 10, 15 + i);
-    cout << "                                                            ";
-  }
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 115);
-  goToXY(6 * 7 + 8, 16);
-  cout << "YOUR SCORE: ";
-  goToXY(7 * 7 + 18, 16);
-  cout << score;
-  goToXY(6 * 7 + 3, 18);
-  cout << "(Press Space to return to Menu)";
 }

@@ -1,5 +1,6 @@
 #include "utils.h"
 
+// providing helper functions    
 
 VECI parseInput(int key)
 {
