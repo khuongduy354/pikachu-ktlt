@@ -17,6 +17,7 @@ void Menu::showScreen() {
   } else if(uname == "") {
     showMenu();
   }
+  menuSound();
 }
 
 void Menu::press() {
@@ -86,7 +87,6 @@ void Menu::gameTitle() {
     cout << gameTitle[i];
   }
 }
-
 void Menu::getPlayerInfor() {
   char table[][63] = {
       {" ------------------------------------------------------------ "},
@@ -138,9 +138,6 @@ void Menu::getPlayerInfor() {
       setCursor(true);
     }
   } while (uname.length() > 10);
-  ofstream fout("leaderboard.txt");
-  fout << uname << " ";
-  fout.close();
 }
 
 void Menu::LeaderBoard() {
@@ -161,7 +158,7 @@ void Menu::LeaderBoard() {
     goToXY(1 * 7 + 5, 1 + i);
     cout << title[i];
   }
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6);
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6 * 16);
   for (int i = 1; i < 4; i++) {
     goToXY(3 * 7 + 5 + 4, 7 + i);
     cout << "                                                             ";
@@ -181,8 +178,7 @@ void Menu::LeaderBoard() {
   int stage[50];
   int score[50];
   int k = 0;
-  while (!fin.eof()) {
-    getline(fin, name[k], ' ');
+  while (getline(fin, name[k], ' ')) {
     fin >> stage[k];
     fin >> score[k];
     fin.get();
@@ -201,7 +197,7 @@ void Menu::LeaderBoard() {
     }
   }
   int n = 0;
-  while (n < 5) {
+  while (n < 4) {
     for (int i = 0; i < 3; i++) {
       goToXY(3 * 7 + 5 + 4, 11 + n * 3 + i);
       cout << learderBoard[i];
@@ -214,7 +210,7 @@ void Menu::LeaderBoard() {
     cout << score[n];
     n++;
   }
-  goToXY(3 * 7 + 5 + 4, 15 + n * 3);
+  goToXY(3 * 7 + 5 + 20, 16 + n * 3);
   cout << "(Press Space to return to Menu)";
 
   fin.close();

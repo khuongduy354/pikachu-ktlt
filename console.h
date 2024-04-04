@@ -7,5 +7,5 @@ void resizeWindow(int, int);
 void setCursor(bool);
 void hideScrollBar();
 void initWindow(int, int);
-void setConsoleColor(int, int);
+
 #endif
